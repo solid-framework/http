@@ -1,0 +1,46 @@
+{
+  "name": "solid-framework/http",
+  "description": "A module for the Solid Framework allowing handling of HTTP requests.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "framework",
+    "solid",
+    "php",
+    "modular",
+    "module",
+    "core",
+    "http"
+  ],
+  "authors": [
+    {
+      "name": "Martin Pettersson",
+      "email": "martin@solid-framework.com",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "http://solid-framework.com",
+  "support": {
+    "email": "support@solid-framework.com",
+    "issues": "https://github.com/solid-framework/http/issues",
+    "source": "https://github.com/solid-framework/http",
+    "docs": "http://docs.solid-framework.com"
+  },
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "Solid\\Http\\": "src"
+    }
+  },
+  "require": {
+    "php": ">=7.0",
+    "solid-framework/core": "dev-master",
+    "psr/http-message": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~5.5.0"
+  },
+  "scripts": {
+    "test": "phpunit"
+  }
+}

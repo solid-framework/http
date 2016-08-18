@@ -121,6 +121,21 @@ class Request implements KernelRequestInterface, RequestInterface
     /**
      * @api
      * @since 0.1.0
+     * @return string
+     */
+    public function __toString()
+    {
+        return <<<REQUEST
+{$this->getMethod()} {$this->getRequestTarget()} HTTP/{$this->getProtocolVersion()}
+{$this->headers}
+
+{$this->getBody()}
+REQUEST;
+    }
+
+    /**
+     * @api
+     * @since 0.1.0
      * @param KernelRequest $request A kernel request to generate the implementation specific request from.
      * @return KernelRequestInterface
      */
@@ -143,6 +158,16 @@ class Request implements KernelRequestInterface, RequestInterface
             $userInfo .= '@';
         }
 
+        $body = '';
+
+        if (in_array(strtolower($serverParameters['method']), ['post', 'put'])) {
+            $body = file_get_contents('php://input');
+
+            if ($body === false || strlen($body) === 0) {
+                $body = http_build_query($request->getRequestParameters(), null, '&', PHP_QUERY_RFC3986);
+            }
+        }
+
         return new self(
             $serverParameters['method'],
             new Uri(
@@ -152,7 +177,7 @@ class Request implements KernelRequestInterface, RequestInterface
                 $serverParameters['path']
             ),
             new HeaderContainer($request->getHeaderParameters()),
-            new StringStream(file_get_contents('php://input'))
+            new StringStream($body)
         );
     }
 

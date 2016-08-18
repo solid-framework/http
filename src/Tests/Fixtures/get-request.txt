@@ -1,0 +1,5 @@
+GET /example/path?parameter1=value1&parameter2=value2 HTTP/1.1
+Content-Length: 0
+Accept: application/json
+Host: example.com
+

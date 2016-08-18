@@ -278,8 +278,16 @@ class RequestTest extends TestCase
         );
 
         $this->assertSame('', (string) $getBody, 'Should return the correct body object');
-        $this->assertSame('', (string) $putBody, 'Should return the correct body object');
-        $this->assertSame('', (string) $postBody, 'Should return the correct body object');
+        $this->assertSame(
+            'parameter1=value1&parameter2=value2',
+            (string) $putBody,
+            'Should return the correct body object'
+        );
+        $this->assertSame(
+            'parameter1=value1&parameter2=value2',
+            (string) $postBody,
+            'Should return the correct body object'
+        );
     }
 
     /**
@@ -476,6 +484,36 @@ class RequestTest extends TestCase
             'example.com',
             $newPreservedEmptyHost->getHeader('Host')[0],
             'Should always update host header if previous host was empty and a new is provided'
+        );
+    }
+
+    /**
+     * @api
+     * @test
+     * @since 0.1.0
+     * @return void
+     */
+    public function testToString()
+    {
+        $this->assertStringEqualsFile(
+            __DIR__ . '/Fixtures/empty-request.txt',
+            (string) $this->emptyRequest,
+            'Should render correctly as a string'
+        );
+        $this->assertStringEqualsFile(
+            __DIR__ . '/Fixtures/get-request.txt',
+            (string) $this->getRequest,
+            'Should render correctly as a string'
+        );
+        $this->assertStringEqualsFile(
+            __DIR__ . '/Fixtures/post-request.txt',
+            (string) $this->postRequest,
+            'Should render correctly as a string'
+        );
+        $this->assertStringEqualsFile(
+            __DIR__ . '/Fixtures/put-request.txt',
+            (string) $this->putRequest,
+            'Should render correctly as a string'
         );
     }
 }

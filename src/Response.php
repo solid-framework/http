@@ -151,9 +151,7 @@ class Response implements KernelResponseInterface, ResponseInterface
         $this->headers = $headers ?? new HeaderContainer;
         $this->body = $body ?? new StringStream;
 
-        if (!$this->headers->has('Content-Length')) {
-            $this->headers->set('Content-Length', $this->body->getSize());
-        }
+        $this->headers->set('Content-Length', $this->body->getSize());
     }
 
     /**
@@ -315,6 +313,7 @@ RESPONSE;
     {
         $newResponse = clone $this;
         $newResponse->body = $body;
+        $newResponse->headers->set('Content-Length', $body->getSize());
 
         return $newResponse;
     }

@@ -222,7 +222,7 @@ REQUEST;
      * @api
      * @since 0.1.0
      * @param string $version HTTP protocol version
-     * @return Request
+     * @return self
      */
     public function withProtocolVersion($version): self
     {
@@ -280,7 +280,7 @@ REQUEST;
      * @since 0.1.0
      * @param string          $name  Case-insensitive header field name.
      * @param string|string[] $value Header value(s).
-     * @return Request
+     * @return self
      * @throws InvalidArgumentException
      */
     public function withHeader($name, $value): self
@@ -296,7 +296,7 @@ REQUEST;
      * @since 0.1.0
      * @param string          $name  Case-insensitive header field name to add.
      * @param string|string[] $value Header value(s).
-     * @return Request
+     * @return self
      * @throws InvalidArgumentException
      */
     public function withAddedHeader($name, $value): self
@@ -313,7 +313,7 @@ REQUEST;
      * @param string $name The header to remove.
      * @return self
      */
-    public function withoutHeader($name)
+    public function withoutHeader($name): self
     {
         $newRequest = clone $this;
         $newRequest->headers->remove($name);
@@ -338,7 +338,7 @@ REQUEST;
      * @return self
      * @throws InvalidArgumentException
      */
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): self
     {
         $newRequest = clone $this;
         $newRequest->body = $body;
@@ -371,7 +371,7 @@ REQUEST;
      * @api
      * @since 0.1.0
      * @param mixed $requestTarget The new request target to use.
-     * @return Request
+     * @return self
      */
     public function withRequestTarget($requestTarget): self
     {
@@ -395,7 +395,7 @@ REQUEST;
      * @api
      * @since 0.1.0
      * @param string $method The new request method to use.
-     * @return Request
+     * @return self
      * @throws InvalidArgumentException
      */
     public function withMethod($method): self
@@ -425,7 +425,7 @@ REQUEST;
      * @since 0.1.0
      * @param UriInterface $uri          The new request uri to use.
      * @param bool         $preserveHost Whether to preserve the original host.
-     * @return Request
+     * @return self
      */
     public function withUri(UriInterface $uri, $preserveHost = false): self
     {

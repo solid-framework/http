@@ -211,16 +211,6 @@ class Uri implements UriInterface
     /**
      * @api
      * @since 0.1.0
-     * @return QueryContainer
-     */
-    public function getQueryContainer(): QueryContainer
-    {
-        return $this->query;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getFragment(): string

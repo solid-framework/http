@@ -218,21 +218,6 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @return void
      */
-    public function testGetQueryContainer()
-    {
-        $uri = new Uri('example.com?parameter=value');
-        $queryContainer = $uri->getQueryContainer();
-
-        $this->assertInstanceOf('Solid\Http\QueryContainer', $queryContainer);
-        $this->assertSame('parameter=value', (string) $queryContainer);
-    }
-
-    /**
-     * @api
-     * @test
-     * @since 0.1.0
-     * @return void
-     */
     public function testGetFragment()
     {
         $empty = new Uri;

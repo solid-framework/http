@@ -86,13 +86,13 @@ class Request implements KernelRequestInterface, RequestInterface
      * @api
      * @since 0.1.0
      * @param string|null          $method  The request method to use.
-     * @param Uri|null             $uri     The request uri to use.
+     * @param UriInterface|null    $uri     The request uri to use.
      * @param HeaderContainer|null $headers The request headers to use.
      * @param StreamInterface|null $body    The request body to use.
      */
     public function __construct(
         string $method = null,
-        Uri $uri = null,
+        UriInterface $uri = null,
         HeaderContainer $headers = null,
         StreamInterface $body = null
     ) {

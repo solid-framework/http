@@ -8,3 +8,7 @@ script:
     - vendor/bin/phpunit --coverage-clover=coverage.xml
 after_success:
     - bash <(curl -s https://codecov.io/bash)
+    - vendor/bin/test-reporter --coverage-report=coverage.xml
+addons:
+    code_climate:
+        repo_token: fe86be42ea89972a805703397b116396a9a65b36d51dd6a3a8578f2a72cafff4

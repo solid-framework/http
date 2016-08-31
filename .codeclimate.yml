@@ -1,0 +1,16 @@
+engines:
+    phpcodesniffer:
+        enabled: true
+        config:
+            file_extensions: "php"
+            standard: "PSR1,PSR2"
+    phpmd:
+        enabled: true
+        config:
+            file_extensions:
+                - php
+exclude_paths:
+    - "**/Tests/"
+ratings:
+    paths:
+        - "src/**"

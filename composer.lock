@@ -4,9 +4,53 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "30165db798efa3aaab23ca60bb674813",
-    "content-hash": "d46a36666cd6ddb71f34d7f392278c0e",
+    "hash": "507a543cda716aa5179dcb574b25b050",
+    "content-hash": "1596a965bde0254afe80d2d10b11f8bc",
     "packages": [
+        {
+            "name": "martin-pettersson/chalk",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/martin-pettersson/chalk.git",
+                "reference": "a4726d6835bdc7eb3c8c77b2df69fa1b9fddb4c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/martin-pettersson/chalk/zipball/a4726d6835bdc7eb3c8c77b2df69fa1b9fddb4c5",
+                "reference": "a4726d6835bdc7eb3c8c77b2df69fa1b9fddb4c5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Chalk\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Martin Pettersson",
+                    "email": "martin_pettersson@outlook.com",
+                    "homepage": "http://martindotcom.se",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A tool to style terminal output",
+            "homepage": "http://github.com/martin-pettersson/chalk",
+            "keywords": [
+                "chalk",
+                "color",
+                "style"
+            ],
+            "time": "2016-08-31 08:35:49"
+        },
         {
             "name": "psr/http-message",
             "version": "1.0.1",
@@ -58,23 +102,64 @@
             "time": "2016-08-06 14:39:51"
         },
         {
-            "name": "solid-framework/core",
-            "version": "0.1.0",
+            "name": "psr/log",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/solid-framework/core.git",
-                "reference": "b3afd7f37d2c6a270ec7914af37fa8f1baac119f"
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-framework/core/zipball/b3afd7f37d2c6a270ec7914af37fa8f1baac119f",
-                "reference": "b3afd7f37d2c6a270ec7914af37fa8f1baac119f",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "solid-framework/core",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/solid-framework/core.git",
+                "reference": "b58d75d9a8b271952c7ea0f41d62dcf3117c10af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/solid-framework/core/zipball/b58d75d9a8b271952c7ea0f41d62dcf3117c10af",
+                "reference": "b58d75d9a8b271952c7ea0f41d62dcf3117c10af",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0"
+                "martin-pettersson/chalk": "^0.1.2",
+                "php": ">=7.0",
+                "psr/log": "~1.0.0"
             },
             "require-dev": {
+                "codeclimate/php-test-reporter": "~0.3.2",
                 "phpunit/phpunit": "~5.5.0"
             },
             "suggest": {
@@ -107,7 +192,7 @@
                 "php",
                 "solid"
             ],
-            "time": "2016-08-14 09:28:39"
+            "time": "2016-09-01 12:27:30"
         }
     ],
     "packages-dev": [
@@ -949,44 +1034,6 @@
                 "xunit"
             ],
             "time": "2016-08-26 05:51:59"
-        },
-        {
-            "name": "psr/log",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/log.git",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Psr\\Log\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for logging libraries",
-            "keywords": [
-                "log",
-                "psr",
-                "psr-3"
-            ],
-            "time": "2012-12-21 11:40:51"
         },
         {
             "name": "satooshi/php-coveralls",

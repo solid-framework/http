@@ -22,7 +22,7 @@ class TestController
     /**
      * @api
      * @since 0.1.0
-     * @return void
+     * @return ResourceResponseInterface
      */
     public function allIndex(): ResourceResponseInterface
     {
@@ -32,7 +32,7 @@ class TestController
     /**
      * @api
      * @since 0.1.0
-     * @return void
+     * @return ResourceResponseInterface
      */
     public function allNoParameters(): ResourceResponseInterface
     {
@@ -44,7 +44,7 @@ class TestController
      * @since 0.1.0
      * @param string $one The first parameter.
      * @param string $two The second parameter.
-     * @return void
+     * @return ResourceResponseInterface
      */
     public function allParameters(string $one, string $two): ResourceResponseInterface
     {
@@ -61,7 +61,7 @@ class TestController
      * @since 0.1.0
      * @param int    $number(/^(0|[1-9][0-9]*)$/)                         The first parameter.
      * @param string $email(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i) The second parameter.
-     * @return void
+     * @return ResourceResponseInterface
      */
     public function allParametersValidation(int $number, string $email): ResourceResponseInterface
     {
@@ -71,5 +71,35 @@ class TestController
         return new ResourceStringResponse(
             "TestController::allParametersValidation({$numberType} {$number}, {$emailType} {$email})"
         );
+    }
+
+    /**
+     * @api
+     * @since 0.1.0
+     * @return ResourceResponseInterface
+     */
+    public function getUser()
+    {
+        return new ResourceStringResponse('TestController::getUser');
+    }
+
+    /**
+     * @api
+     * @since 0.1.0
+     * @return ResourceResponseInterface
+     */
+    public function postUser()
+    {
+        return new ResourceStringResponse('TestController::postUser');
+    }
+
+    /**
+     * @api
+     * @since 0.1.0
+     * @return ResourceResponseInterface
+     */
+    public function updateUser()
+    {
+        return new ResourceStringResponse('TestController::updateUser');
     }
 }

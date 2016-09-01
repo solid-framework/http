@@ -295,4 +295,52 @@ class RouterTest extends TestCase
             $this->emptyRequest->withRequestTarget('/test/parameters/validation/sk8/martin@solid-framework.com')
         );
     }
+
+    /**
+     * @api
+     * @test
+     * @covers ::findControllerMethod
+     * @since 0.1.0
+     * @return void
+     */
+    public function testMethodPrefixResolutionDefault()
+    {
+        $this->containerMock->method('resolve')->will($this->returnCallback(function ($abstract, ...$parameters) {
+            switch ($abstract) {
+                case 'Solid\Config\ConfigSection':
+                    return $this->configMock;
+                case 'controller':
+                    return new \Solid\App\Controllers\TestController;
+            }
+        }));
+        $this->configMock->method('get')->will($this->returnCallback(function ($key, $default) {
+            switch ($key) {
+                case 'routing.prefixMap.get':
+                case 'routing.prefixMap.post':
+                    return $default;
+                case 'routing.prefixMap.put':
+                    return 'update';
+            }
+        }));
+
+        $router = new Router($this->containerMock, $this->configMock);
+
+        $this->assertSame(
+            'TestController::getUser',
+            (string) $router->routeRequest($this->emptyRequest->withRequestTarget('/test/user')->withMethod('GET')),
+            'Should return the correct response'
+        );
+
+        $this->assertSame(
+            'TestController::postUser',
+            (string) $router->routeRequest($this->emptyRequest->withRequestTarget('/test/user')->withMethod('POST')),
+            'Should return the correct response'
+        );
+
+        $this->assertSame(
+            'TestController::updateUser',
+            (string) $router->routeRequest($this->emptyRequest->withRequestTarget('/test/user')->withMethod('PUT')),
+            'Should return the correct response'
+        );
+    }
 }

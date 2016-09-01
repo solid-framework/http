@@ -403,6 +403,11 @@ class UriTest extends TestCase
         $this->assertInstanceOf('Solid\Http\Uri', $newQuery, 'Should return a Uri instance');
         $this->assertNotSame($uri, $newQuery);
         $this->assertSame(
+            'parameter=value',
+            $uri->getQuery(),
+            'Should not mutate the original uri'
+        );
+        $this->assertSame(
             'parameter=value&encoded%26parameter=value2',
             $newQuery->getQuery(),
             'Should be able to set new query'

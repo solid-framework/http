@@ -111,6 +111,15 @@ class Uri implements UriInterface
     /**
      * @api
      * @since 0.1.0
+     */
+    public function __clone()
+    {
+        $this->query = clone $this->query;
+    }
+
+    /**
+     * @api
+     * @since 0.1.0
      * @return string
      */
     public function getScheme(): string

@@ -166,15 +166,38 @@ class KernelTest extends TestCase
      * @since 0.1.0
      * @return void
      */
+    public function test400Response()
+    {
+        $this->containerMock->method('resolve')->will($this->returnValue(new Response));
+        $this->routerMock->method('routeRequest')->will(
+            $this->throwException(new \Solid\Kernel\InvalidUserInputException)
+        );
+        $kernel = new Kernel($this->routerMock, $this->containerMock);
+        $response = $kernel->handleRequest($this->emptyRequest);
+
+        $this->assertSame(400, $response->getStatusCode(), 'Should return correct status code');
+        $this->assertSame(
+            'Bad Request',
+            (string) $response->getBody(),
+            'Should return a response with the correct body'
+        );
+    }
+
+    /**
+     * @api
+     * @test
+     * @covers ::handleRequest
+     * @since 0.1.0
+     * @return void
+     */
     public function test500Response()
     {
         $this->containerMock->method('resolve')->will($this->returnValue(new Response));
         $this->routerMock->method('routeRequest')->will(
             $this->throwException(new \Exception)
         );
-        $request = $this->emptyRequest->withRequestTarget('/no/path');
         $kernel = new Kernel($this->routerMock, $this->containerMock);
-        $response = $kernel->handleRequest($request);
+        $response = $kernel->handleRequest($this->emptyRequest);
 
         $this->assertSame(500, $response->getStatusCode(), 'Should return correct status code');
         $this->assertSame(

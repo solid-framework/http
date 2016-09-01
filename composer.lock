@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6935284b420a572a3c2e34cd0d90181b",
-    "content-hash": "8a2707e88c4c8a996b539248696ee31a",
+    "hash": "ce2793d1259c3c4d98eb14655d0d65e5",
+    "content-hash": "3cf575f5d17148eeb7df9b7fedfbe819",
     "packages": [
         {
             "name": "martin-pettersson/chalk",
@@ -141,16 +141,16 @@
         },
         {
             "name": "solid-framework/core",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-framework/core.git",
-                "reference": "b58d75d9a8b271952c7ea0f41d62dcf3117c10af"
+                "reference": "418e78fc4c630c35a147832615adda0336271569"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-framework/core/zipball/b58d75d9a8b271952c7ea0f41d62dcf3117c10af",
-                "reference": "b58d75d9a8b271952c7ea0f41d62dcf3117c10af",
+                "url": "https://api.github.com/repos/solid-framework/core/zipball/418e78fc4c630c35a147832615adda0336271569",
+                "reference": "418e78fc4c630c35a147832615adda0336271569",
                 "shasum": ""
             },
             "require": {
@@ -192,7 +192,7 @@
                 "php",
                 "solid"
             ],
-            "time": "2016-09-01 12:27:30"
+            "time": "2016-09-01 20:41:57"
         }
     ],
     "packages-dev": [

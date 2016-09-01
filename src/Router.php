@@ -17,6 +17,7 @@ use Solid\Kernel\ResourceResponseInterface;
 use Solid\Kernel\ResourceNotFoundException;
 use Solid\Kernel\ControllerNotFoundException;
 use Solid\Kernel\ControllerMethodNotFoundException;
+use Solid\Kernel\InvalidUserInputException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -206,6 +207,7 @@ class Router
      * @param string $methodName      The controller class method.
      * @param array  $parameters      An array of parameters for the method.
      * @return bool
+     * @throws InvalidUserInputException
      */
     protected function validateControllerMethod($controllerClass, $methodName, array &$parameters): bool
     {
@@ -253,7 +255,7 @@ class Router
 
                 // validate parameters
                 if (!$this->validateParameters($docParameters, $parameters)) {
-                    return false;
+                    throw new InvalidUserInputException;
                 }
             }
 

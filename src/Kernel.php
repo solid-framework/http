@@ -16,6 +16,7 @@ use Solid\Kernel\KernelInterface;
 use Solid\Kernel\RequestInterface as KernelRequestInterface;
 use Solid\Kernel\ResponseInterface as KernelResponseInterface;
 use Solid\Kernel\ResourceNotFoundException;
+use Solid\Kernel\InvalidUserInputException;
 use Solid\Kernel\UnsupportedRequestTypeException;
 use Solid\Kernel\UnsupportedResponseTypeException;
 
@@ -83,6 +84,17 @@ class Kernel implements KernelInterface
                 ->withBody(new StringStream($resourceResponse));
         } catch (ResourceNotFoundException $exception) {
             $statusCode = 404;
+            $message = $exception->getMessage();
+
+            if (strlen($message) === 0) {
+                $message = Response::STATUS_CODES[$statusCode];
+            }
+
+            return $response
+                ->withStatus($statusCode)
+                ->withBody(new StringStream($message));
+        } catch (InvalidUserInputException $exception) {
+            $statusCode = 400;
             $message = $exception->getMessage();
 
             if (strlen($message) === 0) {

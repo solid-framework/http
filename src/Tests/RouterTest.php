@@ -269,7 +269,7 @@ class RouterTest extends TestCase
      * @covers ::findControllerMethod
      * @covers ::validateControllerMethod
      * @covers ::validateParameters
-     * @expectedException Solid\Kernel\ControllerMethodNotFoundException
+     * @expectedException Solid\Kernel\InvalidUserInputException
      * @since 0.1.0
      * @return void
      */

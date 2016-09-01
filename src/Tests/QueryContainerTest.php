@@ -16,6 +16,7 @@ use Solid\Http\QueryContainer;
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
+ * @coversDefaultClass Solid\Http\QueryContainer
  */
 class QueryContainerTest extends TestCase
 {
@@ -40,6 +41,7 @@ class QueryContainerTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -60,6 +62,7 @@ class QueryContainerTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::has
      * @since 0.1.0
      * @return void
      */
@@ -78,6 +81,7 @@ class QueryContainerTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::get
      * @since 0.1.0
      * @return void
      */
@@ -102,6 +106,7 @@ class QueryContainerTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::set
      * @since 0.1.0
      * @return void
      */
@@ -125,6 +130,7 @@ class QueryContainerTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::asArray
      * @since 0.1.0
      * @return void
      */
@@ -145,6 +151,7 @@ class QueryContainerTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__toString
      * @since 0.1.0
      * @return void
      */

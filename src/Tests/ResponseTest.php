@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
+ * @coversDefaultClass Solid\Http\Response
  */
 class ResponseTest extends TestCase
 {
@@ -40,6 +41,7 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @coversNothing
      * @since 0.1.0
      * @return void
      */
@@ -60,6 +62,7 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getProtocolVersion
      * @since 0.1.0
      * @return void
      */
@@ -71,6 +74,8 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withProtocolVersion
+     * @covers ::getProtocolVersion
      * @since 0.1.0
      * @return void
      */
@@ -86,6 +91,7 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getHeaders
      * @since 0.1.0
      * @return void
      */
@@ -103,6 +109,7 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getHeader
      * @since 0.1.0
      * @return void
      */
@@ -128,6 +135,7 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getHeaderLine
      * @since 0.1.0
      * @return void
      */
@@ -161,6 +169,8 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::hasHeader
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -174,6 +184,9 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withHeader
+     * @covers ::getHeader
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -198,6 +211,9 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withAddedHeader
+     * @covers ::getHeader
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -221,6 +237,9 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withoutHeader
+     * @covers ::getHeader
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -244,6 +263,8 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getBody
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -263,6 +284,9 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withBody
+     * @covers ::getBody
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -287,6 +311,7 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getStatusCode
      * @since 0.1.0
      * @return void
      */
@@ -298,6 +323,8 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withStatus
+     * @covers ::getStatusCode
      * @since 0.1.0
      * @return void
      */
@@ -344,9 +371,10 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withStatus
+     * @expectedException InvalidArgumentException
      * @since 0.1.0
      * @return void
-     * @expectedException InvalidArgumentException
      */
     public function testWithInvalidStatus()
     {
@@ -356,6 +384,7 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__toString
      * @since 0.1.0
      * @return void
      */
@@ -371,6 +400,8 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::getReasonPhrase
      * @since 0.1.0
      * @return void
      */
@@ -427,9 +458,10 @@ class ResponseTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @expectedException InvalidArgumentException
      * @since 0.1.0
      * @return void
-     * @expectedException InvalidArgumentException
      */
     public function testInvalidStatusInConstructor()
     {

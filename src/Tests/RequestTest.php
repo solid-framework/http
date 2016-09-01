@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
+ * @coversDefaultClass Solid\Http\Request
  */
 class RequestTest extends TestCase
 {
@@ -60,6 +61,7 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @coversNothing
      * @since 0.1.0
      * @return void
      */
@@ -80,6 +82,7 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getProtocolVersion
      * @since 0.1.0
      * @return void
      */
@@ -91,6 +94,8 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withProtocolVersion
+     * @covers ::getProtocolVersion
      * @since 0.1.0
      * @return void
      */
@@ -106,6 +111,7 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getHeaders
      * @since 0.1.0
      * @return void
      */
@@ -126,6 +132,7 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getHeader
      * @since 0.1.0
      * @return void
      */
@@ -151,6 +158,7 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getHeaderLine
      * @since 0.1.0
      * @return void
      */
@@ -184,6 +192,10 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::hasHeader
+     * @covers ::fromKernelRequest
+     * @covers ::normalizeServerParameters
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -197,6 +209,9 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withHeader
+     * @covers ::getHeader
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -216,6 +231,9 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withAddedHeader
+     * @covers ::getHeader
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -239,6 +257,9 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withoutHeader
+     * @covers ::getHeader
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -262,6 +283,10 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getBody
+     * @covers ::fromKernelRequest
+     * @covers ::normalizeServerParameters
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -293,6 +318,9 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withBody
+     * @covers ::getBody
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -317,6 +345,10 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getRequestTarget
+     * @covers ::fromKernelRequest
+     * @covers ::normalizeServerParameters
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -347,6 +379,8 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withRequestTarget
+     * @covers ::getRequestTarget
      * @since 0.1.0
      * @return void
      */
@@ -367,6 +401,10 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getMethod
+     * @covers ::fromKernelRequest
+     * @covers ::normalizeServerParameters
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -380,6 +418,8 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withMethod
+     * @covers ::getMethod
      * @since 0.1.0
      * @return void
      */
@@ -404,9 +444,10 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withMethod
+     * @expectedException InvalidArgumentException
      * @since 0.1.0
      * @return void
-     * @expectedException InvalidArgumentException
      */
     public function testWithInvalidMethod()
     {
@@ -416,6 +457,7 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getUri
      * @since 0.1.0
      * @return void
      */
@@ -436,6 +478,9 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withUri
+     * @covers ::getUri
+     * @covers ::__clone
      * @since 0.1.0
      * @return void
      */
@@ -490,6 +535,10 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__toString
+     * @covers ::fromKernelRequest
+     * @covers ::normalizeServerParameters
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */

@@ -16,15 +16,17 @@ use Solid\Http\Uri;
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
+ * @coversDefaultClass Solid\Http\Uri
  */
 class UriTest extends TestCase
 {
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @expectedException InvalidArgumentException
      * @since 0.1.0
      * @return void
-     * @expectedException InvalidArgumentException
      */
     public function testInvalidPort()
     {
@@ -34,6 +36,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::getScheme
      * @since 0.1.0
      * @return void
      */
@@ -55,6 +59,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::getAuthority
      * @since 0.1.0
      * @return void
      */
@@ -104,6 +110,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::getUserInfo
      * @since 0.1.0
      * @return void
      */
@@ -130,6 +138,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::getHost
      * @since 0.1.0
      * @return void
      */
@@ -148,6 +158,9 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::isStandardPort
+     * @covers ::getPort
      * @since 0.1.0
      * @return void
      */
@@ -169,6 +182,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::getPath
      * @since 0.1.0
      * @return void
      */
@@ -193,6 +208,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::getQuery
      * @since 0.1.0
      * @return void
      */
@@ -215,6 +232,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
+     * @covers ::getFragment
      * @since 0.1.0
      * @return void
      */
@@ -237,6 +256,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withScheme
+     * @covers ::getScheme
      * @since 0.1.0
      * @return void
      */
@@ -256,6 +277,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withUserInfo
+     * @covers ::getUserInfo
      * @since 0.1.0
      * @return void
      */
@@ -282,6 +305,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withHost
+     * @covers ::getHost
      * @since 0.1.0
      * @return void
      */
@@ -298,6 +323,10 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withPort
+     * @covers ::checkPortRange
+     * @covers ::isStandardPort
+     * @covers ::getPort
      * @since 0.1.0
      * @return void
      */
@@ -317,9 +346,11 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withPort
+     * @covers ::checkPortRange
+     * @expectedException InvalidArgumentException
      * @since 0.1.0
      * @return void
-     * @expectedException InvalidArgumentException
      */
     public function testWithInvalidPort()
     {
@@ -330,6 +361,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withPath
+     * @covers ::getPath
      * @since 0.1.0
      * @return void
      */
@@ -356,6 +389,9 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withQuery
+     * @covers ::__clone
+     * @covers ::getQuery
      * @since 0.1.0
      * @return void
      */
@@ -379,6 +415,8 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::withFragment
+     * @covers ::getFragment
      * @since 0.1.0
      * @return void
      */
@@ -402,6 +440,7 @@ class UriTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__toString
      * @since 0.1.0
      * @return void
      */

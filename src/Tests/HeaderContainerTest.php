@@ -16,6 +16,7 @@ use Solid\Http\HeaderContainer;
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
+ * @coversDefaultClass Solid\Http\HeaderContainer
  */
 class HeaderContainerTest extends TestCase
 {
@@ -43,6 +44,7 @@ class HeaderContainerTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -69,6 +71,7 @@ class HeaderContainerTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__toString
      * @since 0.1.0
      * @return void
      */
@@ -86,6 +89,8 @@ HEADER;
     /**
      * @api
      * @test
+     * @covers ::has
+     * @covers ::getHeaderKey
      * @since 0.1.0
      * @return void
      */
@@ -108,6 +113,8 @@ HEADER;
     /**
      * @api
      * @test
+     * @covers ::get
+     * @covers ::getHeaderKey
      * @since 0.1.0
      * @return void
      */
@@ -153,6 +160,8 @@ HEADER;
     /**
      * @api
      * @test
+     * @covers ::set
+     * @covers ::getHeaderKey
      * @since 0.1.0
      * @return void
      */
@@ -170,6 +179,8 @@ HEADER;
     /**
      * @api
      * @test
+     * @covers ::add
+     * @covers ::getHeaderKey
      * @since 0.1.0
      * @return void
      */
@@ -196,6 +207,8 @@ HEADER;
     /**
      * @api
      * @test
+     * @covers ::remove
+     * @covers ::getHeaderKey
      * @since 0.1.0
      * @return void
      */

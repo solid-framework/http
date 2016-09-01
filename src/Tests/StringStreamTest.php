@@ -16,6 +16,7 @@ use Solid\Http\StringStream;
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
+ * @coversDefaultClass Solid\Http\StringStream
  */
 class StringStreamTest extends TestCase
 {
@@ -41,6 +42,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @before
+     * @coversNothing
      * @since 0.1.0
      * @return void
      */
@@ -56,6 +58,8 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::__toString
+     * @covers ::__construct
      * @since 0.1.0
      * @return void
      */
@@ -71,6 +75,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::isReadable
      * @since 0.1.0
      * @return void
      */
@@ -82,6 +87,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::isWritable
      * @since 0.1.0
      * @return void
      */
@@ -93,6 +99,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::isSeekable
      * @since 0.1.0
      * @return void
      */
@@ -104,6 +111,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::close
      * @since 0.1.0
      * @return void
      */
@@ -120,6 +128,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::detach
      * @since 0.1.0
      * @return void
      */
@@ -136,6 +145,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getSize
      * @since 0.1.0
      * @return void
      */
@@ -151,6 +161,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::tell
      * @since 0.1.0
      * @return void
      */
@@ -173,6 +184,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::eof
      * @since 0.1.0
      * @return void
      */
@@ -193,6 +205,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::seek
      * @since 0.1.0
      * @return void
      */
@@ -228,9 +241,10 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::seek
+     * @expectedException RuntimeException
      * @since 0.1.0
      * @return void
-     * @expectedException RuntimeException
      */
     public function testInvalidSeek()
     {
@@ -240,6 +254,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::rewind
      * @since 0.1.0
      * @return void
      */
@@ -258,6 +273,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::write
      * @since 0.1.0
      * @return void
      */
@@ -286,6 +302,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::read
      * @since 0.1.0
      * @return void
      */
@@ -300,6 +317,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getContents
      * @since 0.1.0
      * @return void
      */
@@ -322,6 +340,7 @@ class StringStreamTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::getMetadata
      * @since 0.1.0
      * @return void
      */

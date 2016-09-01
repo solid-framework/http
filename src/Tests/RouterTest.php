@@ -303,7 +303,7 @@ class RouterTest extends TestCase
      * @since 0.1.0
      * @return void
      */
-    public function testMethodPrefixResolutionDefault()
+    public function testMethodPrefixResolution()
     {
         $this->containerMock->method('resolve')->will($this->returnCallback(function ($abstract, ...$parameters) {
             switch ($abstract) {

@@ -300,6 +300,54 @@ class RouterTest extends TestCase
     /**
      * @api
      * @test
+     * @covers ::validateParameters
+     * @since 0.1.0
+     * @return void
+     */
+    public function testMethodResolutionParametersValidationDefaultParameters()
+    {
+        $this->containerMock->method('resolve')->will($this->returnCallback(function ($abstract, ...$parameters) {
+            switch ($abstract) {
+                case 'Solid\Config\ConfigSection':
+                    return $this->configMock;
+                case 'controller':
+                    return new \Solid\App\Controllers\TestController;
+            }
+        }));
+        $this->configMock->method('get')->will($this->returnCallback(function ($key) {
+            switch ($key) {
+                case 'http.routing.parameterValidation':
+                    return true;
+            }
+        }));
+        $this->configMock->method('has')->will($this->returnValue(true));
+
+        $router = new Router($this->containerMock, $this->configMock);
+
+        try {
+            $response = $router->routeRequest(
+                $this->emptyRequest->withRequestTarget('/test/parameters/validation/default/string/not-matching')
+            );
+
+            $this->fail('Should validate given optional parameters');
+        } catch (\Solid\Kernel\InvalidUserInputException $exception) {
+            $this->assertTrue(true, 'Should validate given optional parameters');
+        }
+
+        $response = $router->routeRequest(
+            $this->emptyRequest->withRequestTarget('/test/parameters/validation/default/string')
+        );
+
+        $this->assertSame(
+            'TestController::allParametersValidationDefault(string string, string special)',
+            (string) $response,
+            'Should not validate default parameters'
+        );
+    }
+
+    /**
+     * @api
+     * @test
      * @covers ::findControllerMethod
      * @since 0.1.0
      * @return void

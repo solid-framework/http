@@ -278,6 +278,7 @@ class Router
             // test the method parameter validator
             if (
                 strlen($docParameter['validation']) > 0 &&
+                array_key_exists($docParameter['index'], $parameters) &&
                 !preg_match($docParameter['validation'], $parameters[$docParameter['index']])
             ) {
                 return false;

@@ -76,6 +76,23 @@ class TestController
     /**
      * @api
      * @since 0.1.0
+     * @param string $string(^string$)            The first parameter.
+     * @param string $number(/^(0|[1-9][0-9]*)$/) The second parameter.
+     * @return ResourceResponseInterface
+     */
+    public function allParametersValidationDefault(string $string, string $number = 'special'): ResourceResponseInterface
+    {
+        $stringType = gettype($string);
+        $numberType = gettype($number);
+
+        return new ResourceStringResponse(
+            "TestController::allParametersValidationDefault({$stringType} {$string}, {$numberType} {$number})"
+        );
+    }
+
+    /**
+     * @api
+     * @since 0.1.0
      * @return ResourceResponseInterface
      */
     public function getUser()

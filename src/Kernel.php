@@ -120,17 +120,17 @@ class Kernel implements KernelInterface
         }
 
         // set initial response header
-        @header(
+        header(
             "HTTP/{$response->getProtocolVersion()} {$response->getStatusCode()} {$response->getReasonPhrase()}",
             true,
             $response->getStatusCode()
         );
 
-        @header('Content-Length: ' . $response->getBody()->getSize());
+        header('Content-Length: ' . $response->getBody()->getSize());
 
         // set registered response headers
         foreach ($response->getHeaders() as $header => $value) {
-            @header($header . ': ' . implode(',', $value));
+            header($header . ': ' . implode(',', $value));
         }
 
         // send the response

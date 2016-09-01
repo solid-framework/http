@@ -233,9 +233,11 @@ class KernelTest extends TestCase
     {
         $kernel = new Kernel($this->routerMock, $this->containerMock);
 
+        set_error_handler(function () {});
         ob_start();
         $kernel->dispatchResponse($this->emptyResponse->withBody(new StringStream('response body')));
         $output = ob_get_clean();
+        restore_error_handler();
 
         $this->assertSame('response body', $output, 'Should respond with the correct body');
     }

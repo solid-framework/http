@@ -108,10 +108,10 @@ class Request implements KernelRequestInterface, RequestInterface
     }
 
     /**
-     * @internal
+     * @api
      * @since 0.1.0
      */
-    protected function __clone()
+    public function __clone()
     {
         $this->headers = clone $this->headers;
         $this->uri = clone $this->uri;

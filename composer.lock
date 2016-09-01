@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "507a543cda716aa5179dcb574b25b050",
-    "content-hash": "1596a965bde0254afe80d2d10b11f8bc",
+    "hash": "6935284b420a572a3c2e34cd0d90181b",
+    "content-hash": "8a2707e88c4c8a996b539248696ee31a",
     "packages": [
         {
             "name": "martin-pettersson/chalk",

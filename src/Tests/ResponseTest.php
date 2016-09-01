@@ -31,9 +31,10 @@ class ResponseTest extends TestCase
 
     /**
      * @api
+     * @before
      * @since 0.1.0
      */
-    public function __construct()
+    public function setup()
     {
         $this->response = new Response;
     }

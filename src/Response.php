@@ -61,7 +61,7 @@ class Response implements KernelResponseInterface, ResponseInterface
      * @since 0.1.0
      * @var array
      */
-    public static $statusCodes = [
+    const STATUS_CODES = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -141,13 +141,13 @@ class Response implements KernelResponseInterface, ResponseInterface
         StreamInterface $body = null
     ) {
         $statusCode = (int) ($statusCode ?? 200);
-        if (!array_key_exists($statusCode, self::$statusCodes)) {
+        if (!array_key_exists($statusCode, self::STATUS_CODES)) {
             throw new InvalidArgumentException("The given status code: {$statusCode} is not supported");
         }
 
         $this->protocolVersion = (string) ($protocolVersion ?? '1.1');
         $this->statusCode = $statusCode;
-        $this->reasonPhrase = (string) ($reasonPhrase ?? self::$statusCodes[$this->statusCode] ?? '');
+        $this->reasonPhrase = (string) ($reasonPhrase ?? self::STATUS_CODES[$this->statusCode] ?? '');
         $this->headers = $headers ?? new HeaderContainer;
         $this->body = $body ?? new StringStream;
 
@@ -338,13 +338,13 @@ RESPONSE;
      */
     public function withStatus($code, $reasonPhrase = null): self
     {
-        if (!array_key_exists($code, self::$statusCodes)) {
+        if (!array_key_exists($code, self::STATUS_CODES)) {
             throw new InvalidArgumentException("The given status code: {$code} is not supported");
         }
 
         $newResponse = clone $this;
         $newResponse->statusCode = $code;
-        $newResponse->reasonPhrase = $reasonPhrase ?? self::$statusCodes[$code];
+        $newResponse->reasonPhrase = $reasonPhrase ?? self::STATUS_CODES[$code];
 
         return $newResponse;
     }

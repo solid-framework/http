@@ -56,7 +56,7 @@ class Router
     public function __construct(Container $container, Config $config)
     {
         $this->container = $container;
-        $this->config = new ConfigSection('http', $config);
+        $this->config = new ConfigSection('http.routing', $config);
     }
 
     /**
@@ -157,7 +157,7 @@ class Router
     protected function findControllerMethod(string $controllerClass, array $pathArray, array &$parameters): string
     {
         $method = strtolower($this->request->getMethod());
-        $prefix = strtolower($this->config->get("routing.prefixMap.{$method}", $method));
+        $prefix = strtolower($this->config->get("prefixMap.{$method}", $method));
 
         $i = count($pathArray);
 

@@ -238,7 +238,7 @@ class RouterTest extends TestCase
         }));
         $this->configMock->method('get')->will($this->returnCallback(function ($key) {
             switch ($key) {
-                case 'http.parameterValidation':
+                case 'http.routing.parameterValidation':
                     return true;
             }
         }));
@@ -285,7 +285,7 @@ class RouterTest extends TestCase
         }));
         $this->configMock->method('get')->will($this->returnCallback(function ($key) {
             switch ($key) {
-                case 'http.parameterValidation':
+                case 'http.routing.parameterValidation':
                     return true;
             }
         }));

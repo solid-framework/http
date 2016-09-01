@@ -238,7 +238,7 @@ class RouterTest extends TestCase
         }));
         $this->configMock->method('get')->will($this->returnCallback(function ($key) {
             switch ($key) {
-                case 'parameterValidation':
+                case 'http.parameterValidation':
                     return true;
             }
         }));
@@ -285,10 +285,11 @@ class RouterTest extends TestCase
         }));
         $this->configMock->method('get')->will($this->returnCallback(function ($key) {
             switch ($key) {
-                case 'parameterValidation':
+                case 'http.parameterValidation':
                     return true;
             }
         }));
+        $this->configMock->method('has')->will($this->returnValue(true));
 
         $router = new Router($this->containerMock, $this->configMock);
         $response = $router->routeRequest(
@@ -315,10 +316,10 @@ class RouterTest extends TestCase
         }));
         $this->configMock->method('get')->will($this->returnCallback(function ($key, $default) {
             switch ($key) {
-                case 'routing.prefixMap.get':
-                case 'routing.prefixMap.post':
+                case 'http.routing.prefixMap.get':
+                case 'http.routing.prefixMap.post':
                     return $default;
-                case 'routing.prefixMap.put':
+                case 'http.routing.prefixMap.put':
                     return 'update';
             }
         }));

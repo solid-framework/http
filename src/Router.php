@@ -11,6 +11,7 @@ namespace Solid\Http;
 
 use ReflectionMethod;
 use Solid\Config\Config;
+use Solid\Config\ConfigSection;
 use Solid\Container\Container;
 use Solid\Kernel\ResourceResponseInterface;
 use Solid\Kernel\ResourceNotFoundException;
@@ -55,7 +56,7 @@ class Router
     public function __construct(Container $container, Config $config)
     {
         $this->container = $container;
-        $this->config = $this->container->resolve('Solid\Config\ConfigSection', 'http', $config);
+        $this->config = new ConfigSection('http', $config);
     }
 
     /**

@@ -19,7 +19,7 @@ use Psr\Http\Message\StreamInterface;
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
  */
-class Response implements KernelResponseInterface, ResponseInterface
+class Response extends Message implements KernelResponseInterface, ResponseInterface
 {
     /**
      * @internal
@@ -132,6 +132,7 @@ class Response implements KernelResponseInterface, ResponseInterface
      * @param string|null          $reasonPhrase    The HTTP reasonphrase to use.
      * @param HeaderContainer|null $headers         The HTTP headers to use.
      * @param StreamInterface|null $body            The body to use.
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $protocolVersion = null,
@@ -145,23 +146,12 @@ class Response implements KernelResponseInterface, ResponseInterface
             throw new InvalidArgumentException("The given status code: {$statusCode} is not supported");
         }
 
-        $this->protocolVersion = (string) ($protocolVersion ?? '1.1');
+        parent::__construct((string) ($protocolVersion ?? '1.1'), $headers ?? new HeaderContainer, $body ?? new StringStream);
+
         $this->statusCode = $statusCode;
         $this->reasonPhrase = (string) ($reasonPhrase ?? self::STATUS_CODES[$this->statusCode] ?? '');
-        $this->headers = $headers ?? new HeaderContainer;
-        $this->body = $body ?? new StringStream;
 
         $this->headers->set('Content-Length', $this->body->getSize());
-    }
-
-    /**
-     * @internal
-     * @since 0.1.0
-     */
-    protected function __clone()
-    {
-        $this->headers = clone $this->headers;
-        $this->body = clone $this->body;
     }
 
     /**
@@ -177,145 +167,6 @@ HTTP/{$this->getProtocolVersion()} {$this->getStatusCode()} {$this->getReasonPhr
 
 {$this->getBody()}
 RESPONSE;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @return string
-     */
-    public function getProtocolVersion(): string
-    {
-        return $this->protocolVersion;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $version
-     * @return Response
-     */
-    public function withProtocolVersion($version): self
-    {
-        $newResponse = clone $this;
-        $newResponse->protocolVersion = $version;
-
-        return $newResponse;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @return array
-     */
-    public function getHeaders(): array
-    {
-        return $this->headers->get();
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name
-     * @return bool
-     */
-    public function hasHeader($name): bool
-    {
-        return $this->headers->has($name);
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name
-     * @return array
-     */
-    public function getHeader($name): array
-    {
-        return $this->headers->get($name);
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name
-     * @return string
-     */
-    public function getHeaderLine($name): string
-    {
-        return implode(',', $this->headers->get($name));
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name
-     * @param string|array $value
-     * @return Response
-     * @throws InvalidArgumentException
-     */
-    public function withHeader($name, $value): self
-    {
-        $newResponse = clone $this;
-        $newResponse->headers->set($name, $value);
-
-        return $newResponse;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name
-     * @param string|array $value
-     * @return Response
-     * @throws InvalidArgumentException
-     */
-    public function withAddedHeader($name, $value): self
-    {
-        $newResponse = clone $this;
-        $newResponse->headers->add($name, $value);
-
-        return $newResponse;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name
-     * @return Response
-     */
-    public function withoutHeader($name): self
-    {
-        $newResponse = clone $this;
-        $newResponse->headers->remove($name);
-
-        return $newResponse;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @return StreamInterface
-     */
-    public function getBody(): StreamInterface
-    {
-        return $this->body;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param StreamInterface $body
-     * @return Response
-     * @throws InvalidArgumentException
-     */
-    public function withBody(StreamInterface $body): self
-    {
-        $newResponse = clone $this;
-        $newResponse->body = $body;
-        $newResponse->headers->set('Content-Length', $body->getSize());
-
-        return $newResponse;
     }
 
     /**

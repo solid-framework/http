@@ -21,7 +21,7 @@ use Psr\Http\Message\RequestInterface;
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
  */
-class Request implements KernelRequestInterface, RequestInterface
+class Request extends Message implements KernelRequestInterface, RequestInterface
 {
     /**
      * @api
@@ -96,11 +96,10 @@ class Request implements KernelRequestInterface, RequestInterface
         HeaderContainer $headers = null,
         StreamInterface $body = null
     ) {
-        $this->protocolVersion = '1.1';
+        parent::__construct('1.1', $headers ?? new HeaderContainer, $body ?? new StringStream);
+
         $this->method = $method;
         $this->uri = $uri ?? new Uri;
-        $this->headers = $headers ?? new HeaderContainer;
-        $this->body = $body ?? new StringStream;
 
         if (strlen($this->uri->getHost()) > 0 && !$this->headers->has('Host')) {
             $this->headers->set('Host', $this->uri->getHost());
@@ -113,9 +112,8 @@ class Request implements KernelRequestInterface, RequestInterface
      */
     public function __clone()
     {
-        $this->headers = clone $this->headers;
+        parent::__clone();
         $this->uri = clone $this->uri;
-        $this->body = clone $this->body;
     }
 
     /**
@@ -206,144 +204,6 @@ REQUEST;
         $path = $serverParameters['REQUEST_URI'] ?? '';
 
         return compact('method', 'scheme', 'host', 'port', 'path', 'username', 'password');
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @return string
-     */
-    public function getProtocolVersion(): string
-    {
-        return $this->protocolVersion;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $version HTTP protocol version
-     * @return self
-     */
-    public function withProtocolVersion($version): self
-    {
-        $newRequest = clone $this;
-        $newRequest->protocolVersion = $version;
-
-        return $newRequest;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @return array
-     */
-    public function getHeaders(): array
-    {
-        return $this->headers->get();
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name The header to check for.
-     * @return bool
-     */
-    public function hasHeader($name): bool
-    {
-        return $this->headers->has($name);
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name The header to get.
-     * @return array
-     */
-    public function getHeader($name): array
-    {
-        return $this->headers->get($name);
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name The header to get.
-     * @return string
-     */
-    public function getHeaderLine($name): string
-    {
-        return implode(',', $this->headers->get($name));
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string          $name  Case-insensitive header field name.
-     * @param string|string[] $value Header value(s).
-     * @return self
-     * @throws InvalidArgumentException
-     */
-    public function withHeader($name, $value): self
-    {
-        $newRequest = clone $this;
-        $newRequest->headers->set($name, $value);
-
-        return $newRequest;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string          $name  Case-insensitive header field name to add.
-     * @param string|string[] $value Header value(s).
-     * @return self
-     * @throws InvalidArgumentException
-     */
-    public function withAddedHeader($name, $value): self
-    {
-        $newRequest = clone $this;
-        $newRequest->headers->add($name, $value);
-
-        return $newRequest;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $name The header to remove.
-     * @return self
-     */
-    public function withoutHeader($name): self
-    {
-        $newRequest = clone $this;
-        $newRequest->headers->remove($name);
-
-        return $newRequest;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @return StreamInterface
-     */
-    public function getBody(): StreamInterface
-    {
-        return $this->body;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param StreamInterface $body The new body to use.
-     * @return self
-     * @throws InvalidArgumentException
-     */
-    public function withBody(StreamInterface $body): self
-    {
-        $newRequest = clone $this;
-        $newRequest->body = $body;
-
-        return $newRequest;
     }
 
     /**

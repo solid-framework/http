@@ -82,46 +82,23 @@ class RequestTest extends TestCase
     /**
      * @api
      * @test
-     * @covers ::getProtocolVersion
-     * @since 0.1.0
-     * @return void
-     */
-    public function testGetProtocolVersion()
-    {
-        $this->assertSame('1.1', $this->getRequest->getProtocolVersion(), 'Should return correct protocol version');
-    }
-
-    /**
-     * @api
-     * @test
-     * @covers ::withProtocolVersion
-     * @covers ::getProtocolVersion
-     * @since 0.1.0
-     * @return void
-     */
-    public function testWithProtocolVersion()
-    {
-        $newProtocolVersion = $this->getRequest->withProtocolVersion('2.0');
-        $this->assertInstanceOf('Solid\Http\Request', $newProtocolVersion, 'Should return new instance');
-        $this->assertNotSame($this->getRequest, $newProtocolVersion, 'Should return new instance');
-        $this->assertSame('1.1', $this->getRequest->getProtocolVersion(), 'Should not mutate the original request');
-        $this->assertSame('2.0', $newProtocolVersion->getProtocolVersion(), 'Should return correct protocol version');
-    }
-
-    /**
-     * @api
-     * @test
      * @covers ::getHeaders
      * @since 0.1.0
      * @return void
      */
     public function testGetHeaders()
     {
-        $this->assertSame([], $this->emptyRequest->getHeaders(), 'Should return the correct headers');
         $this->assertSame(
             [
                 'Content-Length' => [0],
+            ],
+            $this->emptyRequest->getHeaders(),
+            'Should return the correct headers'
+        );
+        $this->assertSame(
+            [
                 'Accept' => ['application/json'],
+                'Content-Length' => [0],
                 'Host' => ['example.com']
             ],
             $this->getRequest->getHeaders(),

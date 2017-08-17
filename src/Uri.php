@@ -102,6 +102,49 @@ class Uri implements UriInterface
     /**
      * @api
      * @since 0.1.0
+     * @return string
+     */
+    public function __toString(): string
+    {
+        $uri = !is_null($this->scheme) ? $this->scheme . ':' : '';
+
+        $authority = $this->getAuthority();
+
+        if (strlen($authority) > 0) {
+            $uri .= '//' . $authority;
+        }
+
+        $path = $this->getPath();
+
+        if (strlen($path)) {
+            // If the path is rootless and an authority is present, the path MUST be prefixed by "/".
+            if (strpos($path, '/') !== 0 && strlen($authority) > 0) {
+                $path = '/' . $path;
+            }
+
+            // If the path is starting with more than one "/" and no authority is present, the starting
+            // slashes MUST be reduced to one.
+            if ($path[1] === '/' && strlen($authority) === 0) {
+                $path = '/' . ltrim($path, '/');
+            }
+        }
+
+        $uri .= $path;
+
+        if (!is_null($this->query)) {
+            $uri .= '?' . $this->getQuery();
+        }
+
+        if (!is_null($this->fragment)) {
+            $uri .= '#' . $this->getFragment();
+        }
+
+        return $uri;
+    }
+
+    /**
+     * @api
+     * @since 0.1.0
      * @param string $uri
      * @return \Solid\Http\Uri
      */
@@ -345,49 +388,6 @@ class Uri implements UriInterface
         $uri = clone $this;
 
         $uri->fragment = strlen($fragment) > 0 ? self::encodeFragment($fragment) : null;
-
-        return $uri;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @return string
-     */
-    public function __toString(): string
-    {
-        $uri = !is_null($this->scheme) ? $this->scheme . ':' : '';
-
-        $authority = $this->getAuthority();
-
-        if (strlen($authority) > 0) {
-            $uri .= '//' . $authority;
-        }
-
-        $path = $this->getPath();
-
-        if (strlen($path)) {
-            // If the path is rootless and an authority is present, the path MUST be prefixed by "/".
-            if (strpos($path, '/') !== 0 && strlen($authority) > 0) {
-                $path = '/' . $path;
-            }
-
-            // If the path is starting with more than one "/" and no authority is present, the starting
-            // slashes MUST be reduced to one.
-            if ($path[1] === '/' && strlen($authority) === 0) {
-                $path = '/' . ltrim($path, '/');
-            }
-        }
-
-        $uri .= $path;
-
-        if (!is_null($this->query)) {
-            $uri .= '?' . $this->getQuery();
-        }
-
-        if (!is_null($this->fragment)) {
-            $uri .= '#' . $this->getFragment();
-        }
 
         return $uri;
     }

@@ -1,6 +1,6 @@
 {
     "name": "solid-framework/http",
-    "description": "A module for the Solid Framework adding an implementation of the PSR-7 HTTP message interfaces",
+    "description": "A module for the Solid Framework adding an implementation of the PSR-7 HTTP message interfaces.",
     "type": "library",
     "license": "MIT",
     "keywords": [

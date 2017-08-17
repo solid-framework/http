@@ -24,7 +24,7 @@
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutOutputDuringTests="true">
     <testsuites>
-        <testsuite name="Solid HTTP">
+        <testsuite name="Solid Framework - HTTP">
             <directory>src</directory>
         </testsuite>
     </testsuites>

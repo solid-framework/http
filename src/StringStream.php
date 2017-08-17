@@ -90,7 +90,7 @@ class StringStream implements StreamInterface
      * @since 0.1.0
      * @return resource|null
      */
-    public function detach(): ?resource
+    public function detach()
     {
         $this->close();
 

@@ -314,7 +314,7 @@ class MessageTest extends TestCase
      * @test
      * @covers ::withHeader
      * @covers ::isValidHeaderName
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function withHeaderShouldThrowExceptionIfInvalidHeaderName(): void
     {
@@ -329,7 +329,7 @@ class MessageTest extends TestCase
      * @test
      * @covers ::withHeader
      * @covers ::isValidHeaderValue
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function withHeaderShouldThrowExceptionIfInvalidHeaderValue(): void
     {
@@ -424,7 +424,7 @@ class MessageTest extends TestCase
      * @test
      * @covers ::withAddedHeader
      * @covers ::isValidHeaderName
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function withAddedHeaderShouldThrowExceptionIfInvalidHeaderName(): void
     {
@@ -439,7 +439,7 @@ class MessageTest extends TestCase
      * @test
      * @covers ::withAddedHeader
      * @covers ::isValidHeaderValue
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function withAddedHeaderShouldThrowExceptionIfInvalidHeaderValue(): void
     {

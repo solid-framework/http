@@ -189,7 +189,7 @@ class StringStreamTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::seek
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function shouldThrowIfInvalidWhence(): void
     {
@@ -201,7 +201,7 @@ class StringStreamTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::seek
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function shouldThrowIfInvalidOffset(): void
     {

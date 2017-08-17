@@ -1,7 +1,0 @@
-Put /path HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-Accept: text/plain
-Content-Length: 35
-Host: example.com
-
-parameter1=value1&parameter2=value2

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2016 Martin Pettersson
+ * Copyright (c) 2017 Martin Pettersson
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -9,10 +9,9 @@
 
 namespace Solid\Http\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Solid\Http\HeaderContainer;
 use Solid\Http\Message;
-use Solid\Http\StringStream;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\MessageInterface;
 
 /**
  * @package Solid\Http\Tests
@@ -22,285 +21,655 @@ use Solid\Http\StringStream;
  */
 class MessageTest extends TestCase
 {
-    /**
-     * @internal
-     * @since 0.1.0
-     * @var Message
-     */
-    protected $message;
+    use MockGeneratorTrait;
 
     /**
-     * @api
-     * @before
      * @since 0.1.0
-     */
-    public function setup()
-    {
-        $this->message = new Message;
-    }
-
-    /**
-     * @api
      * @test
      * @coversNothing
-     * @since 0.1.0
-     * @return void
      */
-    public function testImplementationRequirements()
+    public function shouldImplementPsrMessageInterface(): void
     {
-        $this->assertInstanceOf(
-            'Psr\Http\Message\MessageInterface',
-            $this->message,
-            'Should implement PSR-7 message interface'
-        );
+        $this->assertContains(MessageInterface::class, class_implements(Message::class));
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
      * @covers ::getProtocolVersion
-     * @since 0.1.0
-     * @return void
+     * @covers ::__construct
      */
-    public function testGetProtocolVersion()
+    public function shouldReturnProtocolVersion()
     {
-        $this->assertSame('1.1', $this->message->getProtocolVersion(), 'Should return correct protocol version');
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('2.0', $this->getHeadersMock(), $this->getBodyMock());
+
+        $this->assertSame('2.0', $message->getProtocolVersion());
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
      * @covers ::withProtocolVersion
      * @covers ::getProtocolVersion
-     * @since 0.1.0
-     * @return void
      */
-    public function testWithProtocolVersion()
+    public function shouldReturnNewInstanceWithProtocolVersion()
     {
-        $newProtocolVersion = $this->message->withProtocolVersion('2.0');
-        $this->assertInstanceOf('Solid\Http\Message', $newProtocolVersion, 'Should return new instance');
-        $this->assertNotSame($this->message, $newProtocolVersion, 'Should return new instance');
-        $this->assertSame('1.1', $this->message->getProtocolVersion(), 'Should not mutate the original request');
-        $this->assertSame('2.0', $newProtocolVersion->getProtocolVersion(), 'Should return correct protocol version');
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $this->getBodyMock());
+
+        $messageWithProtocolVersion = $message->withProtocolVersion('2.0');
+
+        $this->assertInstanceOf(Message::class, $messageWithProtocolVersion);
+        $this->assertSame('2.0', $messageWithProtocolVersion->getProtocolVersion());
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::withProtocolVersion
+     */
+    public function withProtocolVersionShouldPreserveTheOriginalMessage(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $this->getBodyMock());
+
+        $messageWithProtocolVersion = $message->withProtocolVersion('2.0');
+
+        $this->assertNotSame($message, $messageWithProtocolVersion);
+        $this->assertSame('1.1', $message->getProtocolVersion());
+    }
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::getHeaders
-     * @since 0.1.0
-     * @return void
+     * @covers ::__construct
      */
-    public function testGetHeaders()
+    public function shouldReturnAllHeaders(): void
     {
-        $this->assertSame(
-            [
-                'Content-Length' => [0]
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1',
+                'header-value-2'
             ],
-            $this->message->getHeaders(),
-            'Should return the correct headers'
-        );
+            'Another-Header' => []
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->assertEquals($headersMock->all(), $message->getHeaders());
     }
 
     /**
-     * @api
-     * @test
-     * @covers ::getHeader
      * @since 0.1.0
-     * @return void
-     */
-    public function testGetHeader()
-    {
-        $this->assertSame(
-            [0],
-            $this->message->getHeader('Content-Length'),
-            'Should be able to retrieve a single header field'
-        );
-        $this->assertSame(
-            [0],
-            $this->message->getHeader('conTent-LEngTh'),
-            'Should be able to retrieve a single header field'
-        );
-        $this->assertSame(
-            [],
-            $this->message->getHeader('Non-Existing-Header'),
-            'Should return an empty array if the header field does not exist'
-        );
-    }
-
-    /**
-     * @api
-     * @test
-     * @covers ::getHeaderLine
-     * @since 0.1.0
-     * @return void
-     */
-    public function testGetHeaderLine()
-    {
-        $this->assertSame(
-            '0',
-            $this->message->getHeaderLine('Content-Length'),
-            'Should return the correct headerline'
-        );
-        $this->assertSame(
-            '0',
-            $this->message->getHeaderLine('conTeNt-lEngTh'),
-            'Should return the correct headerline'
-        );
-
-        $multipleHeaders = $this->message->withAddedHeader('Content-Length', '24');
-        $this->assertSame(
-            '0,24',
-            $multipleHeaders->getHeaderLine('Content-Length'),
-            'Should return the correct headerline'
-        );
-
-        $this->assertSame(
-            '',
-            $this->message->getHeaderLine('Non-Existing-Header'),
-            'Should return an empty string if the header field does not exist'
-        );
-    }
-
-    /**
-     * @api
      * @test
      * @covers ::hasHeader
-     * @covers ::__construct
-     * @since 0.1.0
-     * @return void
      */
-    public function testHasHeader()
+    public function shouldDetermineIfHeaderExists(): void
     {
-        $this->assertTrue($this->message->hasHeader('Content-Length'), 'Should be able to determine if a header is set');
-        $this->assertTrue($this->message->hasHeader('coNteNt-lengtH'), 'Should be able to determine if a header is set');
-        $this->assertFalse($this->message->hasHeader('host'), 'Should be able to determine if a header is set');
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1',
+                'header-value-2'
+            ],
+            'Another-Header' => []
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $this->assertTrue($message->hasHeader('header-name'));
+        $this->assertTrue($message->hasHeader('Another-Header'));
+        $this->assertFalse($message->hasHeader('nokey'));
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::hasHeader
+     * @covers ::getHeaderKey
+     */
+    public function hasHeaderShouldTreatHeadersCaseInsensitively(): void
+    {
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [],
+            'Another-Header' => []
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $this->assertTrue($message->hasHeader('Header-Name'));
+        $this->assertTrue($message->hasHeader('another-header'));
+        $this->assertFalse($message->hasHeader('nokey'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getHeader
+     */
+    public function shouldReturnHeaderValues(): void
+    {
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1',
+                'header-value-2'
+            ],
+            'Another-Header' => []
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $this->assertCount(2, $message->getHeader('header-name'));
+        $this->assertCount(0, $message->getHeader('Another-Header'));
+        $this->assertContains('header-value-1', $message->getHeader('header-name'));
+        $this->assertContains('header-value-2', $message->getHeader('header-name'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getHeader
+     */
+    public function shouldReturnEmptyArrayIfHeaderNotExists(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $this->getBodyMock());
+
+        $this->assertTrue(is_array($message->getHeader('nokey')));
+        $this->assertCount(0, $message->getHeader('nokey'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getHeader
+     * @covers ::getHeaderKey
+     */
+    public function getHeaderShouldTreatHeadersCaseInsensitively(): void
+    {
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => ['value-1'],
+            'Another-Header' => ['value-2']
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $this->assertContains('value-1', $message->getHeader('Header-Name'));
+        $this->assertContains('value-2', $message->getHeader('another-header'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getHeaderLine
+     */
+    public function shouldReturnFormatedHeaderValues(): void
+    {
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1',
+                'header-value-2'
+            ],
+            'Another-Header' => []
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $this->assertSame('header-value-1,header-value-2', $message->getHeaderLine('header-name'));
+        $this->assertSame('', $message->getHeaderLine('Another-Header'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getHeaderLine
+     */
+    public function shouldReturnEmptyStringIfHeaderNotExists(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $this->getBodyMock());
+
+        $this->assertSame('', $message->getHeaderLine('nokey'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getHeaderLine
+     * @covers ::getHeaderKey
+     */
+    public function getHeaderLineShouldTreatHeadersCaseInsensitively(): void
+    {
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1',
+                'header-value-2'
+            ]
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $this->assertSame('header-value-1,header-value-2', $message->getHeaderLine('header-name'));
+        $this->assertSame('header-value-1,header-value-2', $message->getHeaderLine('Header-Name'));
+    }
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::withHeader
-     * @covers ::getHeader
-     * @covers ::__clone
-     * @since 0.1.0
-     * @return void
+     * @covers ::isValidHeaderName
+     * @covers ::isValidHeaderValue
      */
-    public function testWithHeader()
+    public function shouldReturnNewInstanceWithReplacedHeader(): void
     {
-        $newContentLength = $this->message->withHeader('content-length', 24);
-        $this->assertInstanceOf('Solid\Http\Message', $newContentLength, 'Should return new instance');
-        $this->assertNotSame($this->message, $newContentLength, 'Should return new instance');
-        $this->assertSame(
-            [0],
-            $this->message->getHeader('content-length'),
-            'Should not mutate the original message'
-        );
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1',
+                'header-value-2'
+            ],
+            'Another-Header' => []
+        ]);
 
-        $this->assertSame(
-            [24],
-            $newContentLength->getHeader('conTent-lengTh'),
-            'Should be able to set new header value'
-        );
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $messageWithHeader = $message->withHeader('header-name', 'new-value-1');
+
+        $this->assertInstanceOf(Message::class, $messageWithHeader);
+        $this->assertCount(0, $messageWithHeader->getHeader('Another-Header'));
+        $this->assertCount(1, $messageWithHeader->getHeader('header-name'));
+        $this->assertContains('new-value-1', $messageWithHeader->getHeader('header-name'));
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::withHeader
+     * @covers ::isValidHeaderName
+     * @covers ::isValidHeaderValue
+     */
+    public function withHeaderShouldCreateHeaderIfNotExists(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getCollectionImplementation(), $this->getBodyMock());
+
+        $messageWithHeader = $message->withHeader('header-name', 'new-value-1');
+
+        $this->assertTrue($messageWithHeader->hasHeader('header-name'));
+        $this->assertCount(1, $messageWithHeader->getHeader('header-name'));
+        $this->assertContains('new-value-1', $messageWithHeader->getHeader('header-name'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withHeader
+     * @covers ::isValidHeaderName
+     * @expectedException InvalidArgumentException
+     */
+    public function withHeaderShouldThrowExceptionIfInvalidHeaderName(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $this->getBodyMock());
+
+        $message->withHeader('invalid-header-name-' . chr(127), 'value');
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withHeader
+     * @covers ::isValidHeaderValue
+     * @expectedException InvalidArgumentException
+     */
+    public function withHeaderShouldThrowExceptionIfInvalidHeaderValue(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $this->getBodyMock());
+
+        $message->withHeader('header-name', "Invalid \n header value");
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withHeader
+     * @covers ::__clone
+     */
+    public function withHeaderShouldPreserveTheOriginalMessage(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getCollectionImplementation(), $this->getBodyMock());
+
+        $messageWithHeader = $message->withHeader('new-header', 'new-value-1');
+
+        $this->assertNotSame($message, $messageWithHeader);
+        $this->assertFalse($message->hasHeader('new-header'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withHeader
+     * @covers ::getHeaderKey
+     */
+    public function withHeaderShouldTreatHeadersCaseInsensitively(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getCollectionImplementation(), $this->getBodyMock());
+
+        $messageWithHeader = $message->withHeader('Header-Name', 'new-value-1');
+
+        $this->assertCount(1, $messageWithHeader->getHeader('header-name'));
+        $this->assertContains('new-value-1', $messageWithHeader->getHeader('header-name'));
+    }
+
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::withAddedHeader
-     * @covers ::getHeader
-     * @covers ::__clone
-     * @since 0.1.0
-     * @return void
+     * @covers ::isValidHeaderName
+     * @covers ::isValidHeaderValue
      */
-    public function testWithAddedHeader()
+    public function shouldReturnNewInstanceWithAddedHeader(): void
     {
-        $newAddedContentLength = $this->message->withAddedHeader('content-length', 24);
-        $this->assertInstanceOf('Solid\Http\Message', $newAddedContentLength, 'Should return new instance');
-        $this->assertNotSame($this->message, $newAddedContentLength, 'Should return new instance');
-        $this->assertSame(
-            [0],
-            $this->message->getHeader('Content-Length'),
-            'Should not mutate the original request'
-        );
-        $this->assertSame(
-            [0, 24],
-            $newAddedContentLength->getHeader('Content-Length'),
-            'Should be able to set new header value'
-        );
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1'
+            ]
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $messageWithAddedHeader = $message->withAddedHeader('header-name', 'header-value-2');
+
+        $this->assertInstanceOf(Message::class, $messageWithAddedHeader);
+        $this->assertCount(2, $messageWithAddedHeader->getHeader('header-name'));
+        $this->assertContains('header-value-1', $messageWithAddedHeader->getHeader('header-name'));
+        $this->assertContains('header-value-2', $messageWithAddedHeader->getHeader('header-name'));
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::withAddedHeader
+     * @covers ::isValidHeaderName
+     * @covers ::isValidHeaderValue
+     */
+    public function withAddedHeaderShouldCreateHeaderIfNotExists(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getCollectionImplementation(), $this->getBodyMock());
+
+        $messageWithAddedHeader = $message->withAddedHeader('header-name', 'new-value-1');
+
+        $this->assertTrue($messageWithAddedHeader->hasHeader('header-name'));
+        $this->assertCount(1, $messageWithAddedHeader->getHeader('header-name'));
+        $this->assertContains('new-value-1', $messageWithAddedHeader->getHeader('header-name'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withAddedHeader
+     * @covers ::isValidHeaderName
+     * @expectedException InvalidArgumentException
+     */
+    public function withAddedHeaderShouldThrowExceptionIfInvalidHeaderName(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $this->getBodyMock());
+
+        $message->withAddedHeader('invalid-header-name-' . chr(127), 'value');
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withAddedHeader
+     * @covers ::isValidHeaderValue
+     * @expectedException InvalidArgumentException
+     */
+    public function withAddedHeaderShouldThrowExceptionIfInvalidHeaderValue(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $this->getBodyMock());
+
+        $message->withAddedHeader('header-name', "Invalid \n header value");
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withAddedHeader
+     * @covers ::__clone
+     */
+    public function withAddedHeaderShouldPreserveTheOriginalMessage(): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getCollectionImplementation(), $this->getBodyMock());
+
+        $messageWithHeader = $message->withAddedHeader('new-header', 'new-value-1');
+
+        $this->assertNotSame($message, $messageWithHeader);
+        $this->assertFalse($message->hasHeader('new-header'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withAddedHeader
+     * @covers ::getHeaderKey
+     */
+    public function withAddedHeaderShouldTreatHeadersCaseInsensitively(): void
+    {
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1'
+            ]
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $messageWithAddedHeader = $message->withAddedHeader('Header-Name', 'header-value-2');
+
+        $this->assertCount(2, $messageWithAddedHeader->getHeader('header-name'));
+        $this->assertContains('header-value-1', $messageWithAddedHeader->getHeader('header-name'));
+        $this->assertContains('header-value-2', $messageWithAddedHeader->getHeader('header-name'));
+    }
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::withoutHeader
-     * @covers ::getHeader
-     * @covers ::__clone
-     * @since 0.1.0
-     * @return void
      */
-    public function testWithoutHeader()
+    public function shouldReturnNewInstanceWithoutHeader(): void
     {
-        $noContentLength = $this->message->withoutHeader('conTeNt-lengtH');
-        $this->assertInstanceOf('Solid\Http\Message', $noContentLength, 'Should return new instance');
-        $this->assertNotSame($this->message, $noContentLength, 'Should return new instance');
-        $this->assertSame(
-            [0],
-            $this->message->getHeader('content-length'),
-            'Should not mutate the original request'
-        );
-        $this->assertSame(
-            [],
-            $noContentLength->getHeader('Content-Length'),
-            'Should be able to remove headers'
-        );
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1',
+                'header-value-2'
+            ],
+            'Another-Header' => []
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $messageWithoutHeader = $message->withoutHeader('header-name');
+
+        $this->assertInstanceOf(Message::class, $messageWithoutHeader);
+        $this->assertFalse($messageWithoutHeader->hasHeader('header-name'));
+        $this->assertTrue($messageWithoutHeader->hasHeader('Another-Header'));
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::withoutHeader
+     * @covers ::__clone
+     */
+    public function withoutHeaderShouldPreserveTheOriginalMessage(): void
+    {
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [],
+            'Another-Header' => []
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $messageWithoutHeader = $message->withoutHeader('header-name');
+
+        $this->assertNotSame($message, $messageWithoutHeader);
+        $this->assertTrue($message->hasHeader('header-name'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withoutHeader
+     * @covers ::getHeaderKey
+     */
+    public function withoutHeaderShouldTreatHeadersCaseInsensitively(): void
+    {
+        $headersMock = $this->getCollectionImplementation([
+            'header-name' => [
+                'header-value-1',
+                'header-value-2'
+            ],
+            'Another-Header' => []
+        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $headersMock, $this->getBodyMock());
+
+        $messageWithoutHeader = $message->withoutHeader('Header-Name');
+
+        $this->assertFalse($messageWithoutHeader->hasHeader('header-name'));
+        $this->assertTrue($messageWithoutHeader->hasHeader('Another-Header'));
+    }
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::getBody
      * @covers ::__construct
-     * @since 0.1.0
-     * @return void
      */
-    public function testGetBody()
+    public function shouldReturnBody()
     {
-        $body = $this->message->getBody();
+        $bodyMock = $this->getBodyMock();
 
-        $this->assertInstanceOf(
-            'Psr\Http\Message\StreamInterface',
-            $body,
-            'Should return a PSR-7 string stream object'
-        );
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $bodyMock);
 
-        $this->assertSame('', (string) $body, 'Should return the correct body object');
+        $this->assertSame($bodyMock, $message->getBody());
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
      * @covers ::withBody
-     * @covers ::getBody
-     * @covers ::__clone
-     * @since 0.1.0
-     * @return void
      */
-    public function testWithBody()
+    public function shouldReturnNewInstanceWithBody()
     {
-        $newBody = $this->message->withBody(new StringStream('This is the body'));
+        $bodyMock1 = $this->getBodyMock();
+        $bodyMock2 = $this->getBodyMock();
 
-        $this->assertInstanceOf('Solid\Http\Message', $newBody, 'Should return new instance');
-        $this->assertNotSame($this->message, $newBody, 'Should return new instance');
-        $this->assertSame(
-            '',
-            (string) $this->message->getBody(),
-            'Should not mutate the original request'
-        );
-        $this->assertSame(
-            'This is the body',
-            (string) $newBody->getBody(),
-            'Should be able to set new body'
-        );
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $bodyMock1);
+
+        /** @noinspection PhpParamsInspection */
+        $messageWithBody = $message->withBody($bodyMock2);
+
+        $this->assertInstanceOf(Message::class, $messageWithBody);
+        $this->assertSame($bodyMock2, $messageWithBody->getBody());
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withBody
+     * @covers ::__clone
+     */
+    public function withBodyShouldPreserveTheOriginalMessage(): void
+    {
+        $bodyMock1 = $this->getBodyMock();
+        $bodyMock2 = $this->getBodyMock();
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getHeadersMock(), $bodyMock1);
+
+        /** @noinspection PhpParamsInspection */
+        $messageWithBody = $message->withBody($bodyMock2);
+
+        $this->assertNotSame($message, $messageWithBody);
+        $this->assertSame($bodyMock1, $message->getBody());
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withBody
+     */
+    public function withBodyShouldUpdateContentLengthHeader(): void
+    {
+        $bodyMock1 = $this->getBodyMock();
+        $bodyMock1->method('getSize')->willReturn(0);
+
+        $bodyMock2 = $this->getBodyMock();
+        $bodyMock2->method('getSize')->willReturn(1024);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getCollectionImplementation(), $bodyMock1);
+
+        /** @noinspection PhpParamsInspection */
+        $messageWithBody = $message->withBody($bodyMock2);
+
+        $this->assertSame('1024', $messageWithBody->getHeaderLine('Content-Length'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withBody
+     */
+    public function shouldSetInitialContentLengthHeaderIfNotPresent(): void
+    {
+        $bodyMock1 = $this->getBodyMock();
+        $bodyMock1->method('getSize')->willReturn(1024);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getCollectionImplementation(), $bodyMock1);
+
+        $this->assertSame('1024', $message->getHeaderLine('Content-Length'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::withBody
+     */
+    public function shouldNotSetInitialContentLengthHeaderIfAlreadyPresent(): void
+    {
+        $bodyMock1 = $this->getBodyMock();
+        $bodyMock1->method('getSize')->willReturn(1024);
+
+        /** @noinspection PhpParamsInspection */
+        $message = new Message('1.1', $this->getCollectionImplementation(['content-length' => [24]]), $bodyMock1);
+
+        $this->assertSame('24', $message->getHeaderLine('Content-Length'));
     }
 }

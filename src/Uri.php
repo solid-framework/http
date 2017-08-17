@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2016 Martin Pettersson
+ * Copyright (c) 2017 Martin Pettersson
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -9,112 +9,124 @@
 
 namespace Solid\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
+ * @todo Throw appropriate exceptions.
  */
 class Uri implements UriInterface
 {
     /**
-     * @internal
      * @since 0.1.0
-     * @var string
+     * @var string|null
      */
     protected $scheme;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var string
+     * @var string|null
      */
     protected $username;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var string
+     * @var string|null
      */
     protected $password;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var string
+     * @var string|null
      */
     protected $host;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var string
-     */
-    protected $path;
-
-    /**
-     * @internal
-     * @since 0.1.0
-     * @var int
+     * @var int|null
      */
     protected $port;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var QueryContainer
+     * @var string|null
+     */
+    protected $path;
+
+    /**
+     * @since 0.1.0
+     * @var string|null
      */
     protected $query;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var string
+     * @var string|null
      */
     protected $fragment;
 
     /**
      * @api
      * @since 0.1.0
-     * @param string|null $url A well formated url.
+     * @param string|null $scheme
+     * @param string|null $username
+     * @param string|null $password
+     * @param string|null $host
+     * @param int|null    $port
+     * @param string|null $path
+     * @param string|null $query
+     * @param string|null $fragment
      */
-    public function __construct(string $url = null)
-    {
-        // set a default protocol so that parse_url behaves correctly
-        if (false === strpos($url, '://')) {
-            $url = 'parse-url://' . $url;
-        }
-
-        $urlParts = parse_url($url);
-
-        $this->scheme = $urlParts['scheme'] !== 'parse-url' ? $urlParts['scheme'] : null;
-        $this->username = $urlParts['user'] ?? null;
-        $this->password = $urlParts['pass'] ?? null;
-        $this->host = $urlParts['host'] ?? null;
-        $this->path = $urlParts['path'] ?? null;
-        $this->fragment = $urlParts['fragment'] ?? null;
-
-        $port = $urlParts['port'] ?? null;
-
-        if (!is_null($port) && !$this->checkPortRange($port)) {
-            throw new InvalidArgumentException(
-                "The given port \"{$port}\" is not within the established TCP/UDP port range"
-            );
-        }
-
+    public function __construct(
+        ?string $scheme,
+        ?string $username,
+        ?string $password,
+        ?string $host,
+        ?int $port,
+        ?string $path,
+        ?string $query,
+        ?string $fragment
+    ) {
+        $this->scheme = $scheme;
+        $this->username = $username;
+        $this->password = $password;
+        $this->host = $host;
         $this->port = $port;
-        $this->query = new QueryContainer($urlParts['query'] ?? null);
+        $this->path = $path;
+        $this->query = $query;
+        $this->fragment = $fragment;
     }
 
     /**
      * @api
      * @since 0.1.0
+     * @param string $uri
+     * @return \Solid\Http\Uri
      */
-    public function __clone()
+    public static function fromString(string $uri): Uri
     {
-        $this->query = clone $this->query;
+        // Set a default protocol so that parse_url behaves correctly.
+        if (strpos($uri, '://') === false) {
+            $uri = 'parse-url://' . $uri;
+        }
+
+        $uriComponents = parse_url($uri);
+
+        $scheme = isset($uriComponents['scheme']) && $uriComponents['scheme'] !== 'parse-url' ?
+            self::normalizeScheme($uriComponents['scheme']) :
+            null;
+
+        $username = $uriComponents['user'] ?? null;
+        $password = $uriComponents['pass'] ?? null;
+        $host = isset($uriComponents['host']) ? self::normalizeHost($uriComponents['host']) : null;
+        $port = $uriComponents['port'] ?? null;
+        $path = isset($uriComponents['path']) ? self::encodePath($uriComponents['path']) : null;
+        $query = isset($uriComponents['query']) ? self::encodeQuery($uriComponents['query']) : null;
+        $fragment = isset($uriComponents['fragment']) ? self::encodeFragment($uriComponents['fragment']) : null;
+
+        return new static($scheme, $username, $password, $host, $port, $path, $query, $fragment);
     }
 
     /**
@@ -124,7 +136,7 @@ class Uri implements UriInterface
      */
     public function getScheme(): string
     {
-        return !is_null($this->scheme) ? strtolower($this->scheme) : '';
+        return (string)$this->scheme;
     }
 
     /**
@@ -134,21 +146,22 @@ class Uri implements UriInterface
      */
     public function getAuthority(): string
     {
-        $authority = '';
+        $authority = $this->getHost();
 
-        // check required components
-        if (!is_null($this->host)) {
-            $userInfo = $this->getUserInfo();
+        if (strlen($authority) === 0) {
+            return $authority;
+        }
 
-            if (strlen($userInfo) > 0) {
-                $authority .= $userInfo . '@';
-            }
+        $userInfo = $this->getUserInfo();
 
-            $authority .= $this->host;
+        if (strlen($userInfo) > 0) {
+            $authority = "{$userInfo}@{$authority}";
+        }
 
-            if (!is_null($port = $this->getPort())) {
-                $authority .= ':' . $port;
-            }
+        $port = $this->getPort();
+
+        if (!is_null($port)) {
+            $authority .= ":{$port}";
         }
 
         return $authority;
@@ -161,14 +174,10 @@ class Uri implements UriInterface
      */
     public function getUserInfo(): string
     {
-        $userInfo = '';
+        $userInfo = (string)$this->username;
 
-        if (!is_null($this->username)) {
-            $userInfo .= $this->username;
-
-            if (!is_null($this->password)) {
-                $userInfo .= ':' . $this->password;
-            }
+        if (!is_null($this->password)) {
+            $userInfo .= ":{$this->password}";
         }
 
         return $userInfo;
@@ -181,7 +190,7 @@ class Uri implements UriInterface
      */
     public function getHost(): string
     {
-        return !is_null($this->host) ? strtolower($this->host) : '';
+        return (string)$this->host;
     }
 
     /**
@@ -189,9 +198,13 @@ class Uri implements UriInterface
      * @since 0.1.0
      * @return int|null
      */
-    public function getPort()
+    public function getPort(): ?int
     {
-        return (!is_null($this->port) && !$this->isStandardPort($this->port)) ? $this->port : null;
+        if (!is_null($this->port) && !$this->isStandardPort($this->port)) {
+            return $this->port;
+        }
+
+        return null;
     }
 
     /**
@@ -201,10 +214,7 @@ class Uri implements UriInterface
      */
     public function getPath(): string
     {
-        return !is_null($this->path) ?
-            // decode the path before encoding to avoid double encoding
-            implode('/', array_map('rawurlencode', array_map('rawurldecode', explode('/', $this->path)))) :
-            '';
+        return (string)$this->path;
     }
 
     /**
@@ -214,7 +224,7 @@ class Uri implements UriInterface
      */
     public function getQuery(): string
     {
-        return (string) $this->query;
+        return (string)$this->query;
     }
 
     /**
@@ -224,185 +234,119 @@ class Uri implements UriInterface
      */
     public function getFragment(): string
     {
-        return !is_null($this->fragment) ? rawurlencode(rawurldecode($this->fragment)) : '';
+        return (string)$this->fragment;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $scheme The new scheme to use.
-     * @return Uri
+     * @param string $scheme
+     * @return \Solid\Http\Uri
+     * @throws \InvalidArgumentException
      */
-    public function withScheme($scheme): self
+    public function withScheme($scheme): Uri
     {
-        $newUrl = clone $this;
+        $uri = clone $this;
 
-        $newUrl->scheme = $scheme ?? null;
+        $uri->scheme = strlen($scheme) > 0 ? self::normalizeScheme($scheme) : null;
 
-        return $newUrl;
+        return $uri;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string      $user     The new user to use.
-     * @param string|null $password The new password to use.
-     * @return Uri
+     * @param string      $user
+     * @param string|null $password
+     * @return \Solid\Http\Uri
      */
-    public function withUserInfo($user, $password = null): self
+    public function withUserInfo($user, $password = null): Uri
     {
-        $newUrl = clone $this;
+        $uri = clone $this;
 
-        $newUrl->username = $user ?? null;
-        $newUrl->password = $password;
+        $uri->username = strlen($user) > 0 ? $user : null;
+        $uri->password = $password;
 
-        return $newUrl;
+        return $uri;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $host The new host to use.
-     * @return Uri
+     * @param string $host
+     * @return \Solid\Http\Uri
+     * @throws \InvalidArgumentException
      */
-    public function withHost($host): self
+    public function withHost($host): Uri
     {
-        $newUrl = clone $this;
+        $uri = clone $this;
 
-        $newUrl->host = $host ?? null;
+        $uri->host = strlen($host) > 0 ? self::normalizeHost($host) : null;
 
-        return $newUrl;
+        return $uri;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param int|null $port The new port to use.
-     * @return Uri
-     * @throws InvalidArgumentException
+     * @param int|null $port
+     * @return \Solid\Http\Uri
+     * @throws \InvalidArgumentException
      */
-    public function withPort($port): self
+    public function withPort($port): Uri
     {
-        if (!is_null($port) && !$this->checkPortRange($port)) {
-            throw new InvalidArgumentException("The given port: {$port} is not supported");
-        }
+        $uri = clone $this;
 
-        $newUrl = clone $this;
+        $uri->port = $port;
 
-        $newUrl->port = $port;
-
-        return $newUrl;
+        return $uri;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $path The new path to use.
-     * @return Uri
+     * @param string $path
+     * @return \Solid\Http\Uri
+     * @throws \InvalidArgumentException
      */
-    public function withPath($path): self
+    public function withPath($path): Uri
     {
-        $newUrl = clone $this;
+        $uri = clone $this;
 
-        $newUrl->path = $path;
+        $uri->path = self::encodePath($path);
 
-        return $newUrl;
+        return $uri;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $query The new query to use.
-     * @return Uri
+     * @param string $query
+     * @return \Solid\Http\Uri
+     * @throws \InvalidArgumentException
      */
-    public function withQuery($query): self
+    public function withQuery($query): Uri
     {
-        $newUrl = clone $this;
+        $uri = clone $this;
 
-        $newUrl->query = new QueryContainer($query);
+        $uri->query = strlen($query) > 0 ? self::encodeQuery($query) : null;
 
-        return $newUrl;
+        return $uri;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $fragment The new fragment to use.
-     * @return Uri
+     * @param string $fragment
+     * @return \Solid\Http\Uri
      */
-    public function withFragment($fragment): self
+    public function withFragment($fragment): Uri
     {
-        $newUrl = clone $this;
+        $uri = clone $this;
 
-        $newUrl->fragment = !empty($fragment) ? $fragment : null;
+        $uri->fragment = strlen($fragment) > 0 ? self::encodeFragment($fragment) : null;
 
-        return $newUrl;
-    }
-
-    /**
-     * Returns true if the given port is within the established TCP and UDP port ranges
-     *
-     * @internal
-     * @since 0.1.0
-     * @param int $port The port to check.
-     * @return bool
-     */
-    protected function checkPortRange(int $port): bool
-    {
-        return
-            $port >= 1 && $port <= 223 ||
-            $port >= 242 && $port <= 246 ||
-            $port >= 256 && $port <= 600 ||
-            $port >= 606 && $port <= 611 ||
-            $port >= 747 && $port <= 754 ||
-            $port >= 758 && $port <= 765 ||
-            $port >= 769 && $port <= 776 ||
-            $port >= 996 && $port <= 1000 ||
-            $port >= 1030 && $port <= 1032 ||
-            $port >= 1067 && $port <= 1068 ||
-            $port >= 1083 && $port <= 1084 ||
-            $port >= 1346 && $port <= 1527 ||
-            $port >= 1650 && $port <= 1655 ||
-            $port >= 1661 && $port <= 1666 ||
-            $port >= 1986 && $port <= 2002 ||
-            $port >= 2004 && $port <= 2028 ||
-            $port >= 2032 && $port <= 2035 ||
-            $port >= 2040 && $port <= 2049 ||
-            $port >= 2500 && $port <= 2501 ||
-            $port >= 3984 && $port <= 3986 ||
-            $port >= 4132 && $port <= 4133 ||
-            $port >= 5300 && $port <= 5305 ||
-            $port >= 6000 && $port <= 6063 ||
-            $port >= 6141 && $port <= 6147 ||
-            $port >= 7000 && $port <= 7010 ||
-            in_array($port, [
-                634, 666, 704, 709, 729, 730, 731, 741, 742, 744, 767, 780, 786,
-                800, 801, 1025, 1080, 1155, 1222, 1248, 1529, 1600, 2030, 2038,
-                2065, 2067, 2201, 2564, 2784, 3049, 3264, 3333, 3421, 3900, 4343,
-                4444, 4672, 5000, 5001, 5002, 5010, 5011, 5050, 5145, 5190, 5236,
-                6111, 6558, 7100, 7200, 9535, 17007
-            ]);
-    }
-
-    /**
-     * @internal
-     * @since 0.1.0
-     * @param int $port The port to check.
-     * @return bool
-     */
-    protected function isStandardPort(int $port): bool
-    {
-        switch ($this->scheme) {
-            case 'http':
-                return $port === 80;
-                break;
-            case 'https':
-                return $port === 443;
-                break;
-            default:
-                return false;
-                break;
-        }
+        return $uri;
     }
 
     /**
@@ -412,44 +356,108 @@ class Uri implements UriInterface
      */
     public function __toString(): string
     {
-        $url = '';
-
-        $scheme = $this->getScheme();
-
-        if (!empty($scheme)) {
-            $url .= $scheme . ':';
-        }
+        $uri = !is_null($this->scheme) ? $this->scheme . ':' : '';
 
         $authority = $this->getAuthority();
 
         if (strlen($authority) > 0) {
-            $url .= '//' . $authority;
+            $uri .= '//' . $authority;
         }
 
         $path = $this->getPath();
 
-        if (!is_null($path) && strlen($path) > 0) {
+        if (strlen($path)) {
+            // If the path is rootless and an authority is present, the path MUST be prefixed by "/".
             if (strpos($path, '/') !== 0 && strlen($authority) > 0) {
                 $path = '/' . $path;
-            } elseif (substr($path, 0, 2) === '//' && strlen($authority) === 0) {
-                $path = '/' . ltrim($path, '/');
             }
 
-            $url .= $path;
+            // If the path is starting with more than one "/" and no authority is present, the starting
+            // slashes MUST be reduced to one.
+            if ($path[1] === '/' && strlen($authority) === 0) {
+                $path = '/' . ltrim($path, '/');
+            }
         }
 
-        $query = $this->getQuery();
+        $uri .= $path;
 
-        if (strlen($query) > 0) {
-            $url .= '?' . $query;
+        if (!is_null($this->query)) {
+            $uri .= '?' . $this->getQuery();
         }
 
-        $fragment = $this->getFragment();
-
-        if (strlen($fragment) > 0) {
-            $url .= '#' . $fragment;
+        if (!is_null($this->fragment)) {
+            $uri .= '#' . $this->getFragment();
         }
 
-        return $url;
+        return $uri;
+    }
+
+    /**
+     * @since 0.1.0
+     * @param int $port
+     * @return bool
+     */
+    protected function isStandardPort(int $port): bool
+    {
+        switch ($this->scheme) {
+            case 'http':
+                return $port === 80;
+            case 'https':
+                return $port === 443;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * @since 0.1.0
+     * @param string $scheme
+     * @return string
+     */
+    protected static function normalizeScheme(string $scheme): string
+    {
+        return strtolower($scheme);
+    }
+
+    /**
+     * @since 0.1.0
+     * @param string $host
+     * @return string
+     */
+    protected static function normalizeHost(string $host): string
+    {
+        return strtolower($host);
+    }
+
+    /**
+     * @since 0.1.0
+     * @param string $path
+     * @return string
+     */
+    protected static function encodePath(string $path): string
+    {
+        return implode('/', array_map('rawurlencode', array_map('rawurldecode', explode('/', (string)$path))));
+    }
+
+    /**
+     * @since 0.1.0
+     * @param string $query
+     * @return string
+     */
+    protected static function encodeQuery(string $query): string
+    {
+        return implode('&', array_map(function ($parameter) {
+            return implode('=', array_map('rawurlencode', array_map('rawurldecode', explode('=', $parameter))));
+        }, explode('&', $query)));
+    }
+
+    /**
+     * @since 0.1.0
+     * @param string $fragment
+     * @return string
+     */
+    protected static function encodeFragment(string $fragment): string
+    {
+        return rawurlencode(rawurldecode((string)$fragment));
     }
 }

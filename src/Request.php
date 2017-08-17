@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2016 Martin Pettersson
+ * Copyright (c) 2017 Martin Pettersson
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,200 +10,80 @@
 namespace Solid\Http;
 
 use InvalidArgumentException;
-use Solid\Kernel\Request as KernelRequest;
-use Solid\Kernel\RequestInterface as KernelRequestInterface;
-use Psr\Http\Message\UriInterface;
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
+use Solid\Collection\CollectionInterface;
 
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
  * @since 0.1.0
  */
-class Request extends Message implements KernelRequestInterface, RequestInterface
+class Request extends Message implements RequestInterface
 {
     /**
-     * @api
-     * @since 0.1.0
-     * @var array
-     */
-    const SUPPORTED_METHODS = [
-        'HEAD',
-        'GET',
-        'POST',
-        'PUT',
-        'DELETE',
-        'TRACE',
-        'OPTIONS',
-        'CONNECT',
-        'PATCH'
-    ];
-
-    /**
-     * @internal
      * @since 0.1.0
      * @var string
      */
     protected $method;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var string
+     * @var \Psr\Http\Message\UriInterface
      */
-    protected $protocolVersion;
+    protected $uri;
 
     /**
-     * @internal
-     * @since 0.1.0
-     * @var HeaderContainer
-     */
-    protected $headers;
-
-    /**
-     * @internal
      * @since 0.1.0
      * @var string
      */
     protected $target;
 
     /**
-     * @internal
-     * @since 0.1.0
-     * @var UriInterface
-     */
-    protected $uri;
-
-    /**
-     * @internal
-     * @since 0.1.0
-     * @var StreamInterface
-     */
-    protected $body;
-
-    /**
      * @api
      * @since 0.1.0
-     * @param string|null          $method  The request method to use.
-     * @param UriInterface|null    $uri     The request uri to use.
-     * @param HeaderContainer|null $headers The request headers to use.
-     * @param StreamInterface|null $body    The request body to use.
+     * @param string                                $method
+     * @param \Psr\Http\Message\UriInterface        $uri
+     * @param string                                $protocolVersion
+     * @param \Solid\Collection\CollectionInterface $headers
+     * @param \Psr\Http\Message\StreamInterface     $body
      */
     public function __construct(
-        string $method = null,
-        UriInterface $uri = null,
-        HeaderContainer $headers = null,
-        StreamInterface $body = null
+        string $method,
+        UriInterface $uri,
+        string $protocolVersion,
+        CollectionInterface $headers,
+        StreamInterface $body
     ) {
-        parent::__construct('1.1', $headers ?? new HeaderContainer, $body ?? new StringStream);
+        parent::__construct($protocolVersion, $headers, $body);
+
+        $host = $uri->getHost();
+
+        if (strlen($host) > 0 && strlen($this->getheaderLine('Host')) === 0) {
+            $headers->set('Host', [$host]);
+        }
 
         $this->method = $method;
-        $this->uri = $uri ?? new Uri;
-
-        if (strlen($this->uri->getHost()) > 0 && !$this->headers->has('Host')) {
-            $this->headers->set('Host', $this->uri->getHost());
-        }
+        $this->uri = $uri;
     }
 
     /**
-     * @api
-     * @since 0.1.0
-     */
-    public function __clone()
-    {
-        parent::__clone();
-        $this->uri = clone $this->uri;
-    }
-
-    /**
-     * @api
      * @since 0.1.0
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return <<<REQUEST
-{$this->getMethod()} {$this->getRequestTarget()} HTTP/{$this->getProtocolVersion()}
-{$this->headers}
+        $request = "{$this->getMethod()} {$this->getRequestTarget()} HTTP/{$this->getProtocolVersion()}\n";
 
-{$this->getBody()}
-REQUEST;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param KernelRequest $request A kernel request to generate the implementation specific request from.
-     * @return KernelRequestInterface
-     */
-    public static function fromKernelRequest(KernelRequest $request): KernelRequestInterface
-    {
-        $serverParameters = self::normalizeServerParameters($request->getServerParameters());
-
-        $userInfo = $serverParameters['username'];
-        $host = $serverParameters['host'];
-
-        if (!is_null($serverParameters['port'])) {
-            $host .= ':' . $serverParameters['port'];
+        foreach ($this->getHeaders() as $name => $values) {
+            $headerLine = implode(',', $values);
+            $request .= "{$name}: {$headerLine}\n";
         }
 
-        if (!empty($userInfo)) {
-            if (!empty($serverParameters['password'])) {
-                $userInfo .= ':' . $serverParameters['password'];
-            }
+        $request .= "\n{$this->getBody()}";
 
-            $userInfo .= '@';
-        }
-
-        $body = '';
-
-        if (in_array(strtolower($serverParameters['method']), ['post', 'put'])) {
-            $body = file_get_contents('php://input');
-
-            if ($body === false || strlen($body) === 0) {
-                $body = http_build_query($request->getRequestParameters(), null, '&', PHP_QUERY_RFC3986);
-            }
-        }
-
-        return new self(
-            $serverParameters['method'],
-            new Uri(
-                $serverParameters['scheme'] . '://' .
-                $userInfo .
-                $host .
-                $serverParameters['path']
-            ),
-            new HeaderContainer($request->getHeaderParameters()),
-            new StringStream($body)
-        );
-    }
-
-    /**
-     * @internal
-     * @since 0.1.0
-     * @param array $serverParameters The server parameters to normalize.
-     * @return array
-     */
-    private static function normalizeServerParameters(array $serverParameters): array
-    {
-        $method = $serverParameters['REQUEST_METHOD'] ?? '';
-        $port = $serverParameters['SERVER_PORT'] ?? null;
-
-        $scheme = 'http';
-
-        if (array_key_exists('REQUEST_SCHEME', $serverParameters)) {
-            $scheme = $serverParameters['REQUEST_SCHEME'];
-        } elseif ((array_key_exists('HTTPS', $serverParameters) && $serverParameters['HTTPS'] === 'on') || $port === 443) {
-            $scheme = 'https';
-        }
-
-        $username = $serverParameters['PHP_AUTH_USER'] ?? '';
-        $password = $serverParameters['PHP_AUTH_PW'] ?? '';
-        $host = $serverParameters['HTTP_HOST'] ?? '';
-        $path = $serverParameters['REQUEST_URI'] ?? '';
-
-        return compact('method', 'scheme', 'host', 'port', 'path', 'username', 'password');
+        return $request;
     }
 
     /**
@@ -224,21 +104,21 @@ REQUEST;
             $path .= '?' . $query;
         }
 
-        return strlen($path) > 0 ? $path : '/';
+        return $path;
     }
 
     /**
      * @api
-     * @since 0.1.0
-     * @param mixed $requestTarget The new request target to use.
-     * @return self
+     * @param mixed $requestTarget
+     * @return \Solid\Http\Request
      */
-    public function withRequestTarget($requestTarget): self
+    public function withRequestTarget($requestTarget): Request
     {
-        $newRequest = clone $this;
-        $newRequest->target = $requestTarget;
+        $request = clone $this;
 
-        return $newRequest;
+        $request->target = $requestTarget;
+
+        return $request;
     }
 
     /**
@@ -254,26 +134,27 @@ REQUEST;
     /**
      * @api
      * @since 0.1.0
-     * @param string $method The new request method to use.
-     * @return self
-     * @throws InvalidArgumentException
+     * @param string $method
+     * @return \Solid\Http\Request
+     * @throws \InvalidArgumentException
      */
-    public function withMethod($method): self
+    public function withMethod($method): Request
     {
-        if (!in_array(strtolower($method), array_map('strtolower', self::SUPPORTED_METHODS))) {
-            throw new InvalidArgumentException('Unsupported request method: ' . $method);
+        if (!in_array(strtolower($method), array_map('strtolower', RequestMethods::values()))) {
+            throw new InvalidArgumentException("The method: {$method} is not a valid HTTP request method");
         }
 
-        $newRequest = clone $this;
-        $newRequest->method = $method;
+        $request = clone $this;
 
-        return $newRequest;
+        $request->method = $method;
+
+        return $request;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @return UriInterface
+     * @return \Psr\Http\Message\UriInterface
      */
     public function getUri(): UriInterface
     {
@@ -283,23 +164,24 @@ REQUEST;
     /**
      * @api
      * @since 0.1.0
-     * @param UriInterface $uri          The new request uri to use.
-     * @param bool         $preserveHost Whether to preserve the original host.
-     * @return self
+     * @param \Psr\Http\Message\UriInterface $uri
+     * @param bool                           $preserveHost
+     * @return Request
      */
-    public function withUri(UriInterface $uri, $preserveHost = false): self
+    public function withUri(UriInterface $uri, $preserveHost = false): Request
     {
-        $newRequest = clone $this;
-        $newRequest->uri = $uri;
+        $request = clone $this;
 
-        $host = $newRequest->getUri()->getHost();
+        $request->uri = $uri;
+
+        $host = $uri->getHost();
 
         if (strlen($host) > 0) {
-            if (!$preserveHost || !$newRequest->headers->has('Host')) {
-                $newRequest->headers->set('Host', $host);
+            if (!$preserveHost || ($preserveHost && strlen($this->getHeaderLine('Host')) === 0)) {
+                $request->headers->set('Host', [$uri->getHost()]);
             }
         }
 
-        return $newRequest;
+        return $request;
     }
 }

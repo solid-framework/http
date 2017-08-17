@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2016 Martin Pettersson
+ * Copyright (c) 2017 Martin Pettersson
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -9,8 +9,9 @@
 
 namespace Solid\Http\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Solid\Http\StringStream;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * @package Solid\Http\Tests
@@ -21,359 +22,426 @@ use Solid\Http\StringStream;
 class StringStreamTest extends TestCase
 {
     /**
-     * @internal
      * @since 0.1.0
-     * @var string
-     */
-    protected $stringStream;
-
-    /**
-     * @api
-     * @before
-     * @since 0.1.0
-     * @return void
-     */
-    public function setup()
-    {
-        $this->stringStream = new StringStream('This is a test string.');
-    }
-
-
-    /**
-     * @api
-     * @before
+     * @test
      * @coversNothing
-     * @since 0.1.0
-     * @return void
      */
-    public function testImplementationRequirements()
+    public function shouldImplementPsrStreamInterface(): void
     {
-        $this->assertInstanceOf(
-            'Psr\Http\Message\StreamInterface',
-            $this->stringStream,
-            'Should implement PSR-7 StreamInterface'
-        );
+        $this->assertContains(StreamInterface::class, class_implements(StringStream::class));
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
-     * @covers ::__toString
      * @covers ::__construct
-     * @since 0.1.0
-     * @return void
+     * @covers ::__toString
      */
-    public function testToString()
+    public function shouldReturnTheEntireStreamWhenCastToString(): void
     {
-        $this->assertSame(
-            'This is a test string.',
-            (string) $this->stringStream,
-            'Should render correctly as a string'
-        );
+        $streamContent = 'Stream Content';
+        $stringStream = new StringStream($streamContent);
+
+        $this->assertSame($streamContent, (string)$stringStream);
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
+     * @covers ::__construct
+     * @covers ::__toString
+     */
+    public function shouldProvideDefaultStreamContent(): void
+    {
+        $stringStream = new StringStream;
+
+        $this->assertSame('', (string)$stringStream);
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::__construct
      * @covers ::isReadable
-     * @since 0.1.0
-     * @return void
-     */
-    public function testIsReadable()
-    {
-        $this->assertTrue($this->stringStream->isReadable(), 'Should be readable');
-    }
-
-    /**
-     * @api
-     * @test
      * @covers ::isWritable
-     * @since 0.1.0
-     * @return void
-     */
-    public function testIsWritable()
-    {
-        $this->assertTrue($this->stringStream->isWritable(), 'Should be writable');
-    }
-
-    /**
-     * @api
-     * @test
      * @covers ::isSeekable
-     * @since 0.1.0
-     * @return void
      */
-    public function testIsSeekable()
+    public function shouldInitializeProperly(): void
     {
-        $this->assertTrue($this->stringStream->isSeekable(), 'Should be seekable');
+        $stringStream = new StringStream;
+
+        $this->assertTrue($stringStream->isReadable());
+        $this->assertTrue($stringStream->isWritable());
+        $this->assertTrue($stringStream->isSeekable());
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
      * @covers ::close
-     * @since 0.1.0
-     * @return void
      */
-    public function testClose()
+    public function shouldCloseProperly(): void
     {
-        $this->stringStream->close();
+        $stringStream = new StringStream('Stream Content');
 
-        $this->assertFalse($this->stringStream->isReadable(), 'Should be able to close stream');
-        $this->assertFalse($this->stringStream->isWritable(), 'Should be able to close stream');
-        $this->assertFalse($this->stringStream->isSeekable(), 'Should be able to close stream');
-        $this->assertSame('', (string) $this->stringStream, 'Should be able to close stream');
+        $stringStream->close();
+
+        $this->assertSame('', (string)$stringStream);
+        $this->assertFalse($stringStream->isReadable());
+        $this->assertFalse($stringStream->isWritable());
+        $this->assertFalse($stringStream->isSeekable());
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
      * @covers ::detach
-     * @since 0.1.0
-     * @return void
      */
-    public function testDetach()
+    public function shouldDetachProperly(): void
     {
-        $this->stringStream->detach();
+        $stringStream = new StringStream('Stream Content');
 
-        $this->assertFalse($this->stringStream->isReadable(), 'Should be able to detach stream');
-        $this->assertFalse($this->stringStream->isWritable(), 'Should be able to detach stream');
-        $this->assertFalse($this->stringStream->isSeekable(), 'Should be able to detach stream');
-        $this->assertSame('', (string) $this->stringStream, 'Should be able to detach stream');
+        $stream = $stringStream->detach();
+
+        $this->assertSame('', (string)$stringStream);
+        $this->assertFalse($stringStream->isReadable());
+        $this->assertFalse($stringStream->isWritable());
+        $this->assertFalse($stringStream->isSeekable());
+        $this->assertNull($stream);
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
      * @covers ::getSize
-     * @since 0.1.0
-     * @return void
      */
-    public function testGetSize()
+    public function shouldReturnContentSize(): void
     {
-        $this->assertSame(
-            strlen('This is a test string.'),
-            $this->stringStream->getSize(),
-            'Should be able to determine the size of the stream'
-        );
+        $emptyStream = new StringStream('');
+        $stringStream = new StringStream('Stream Content');
+
+        $this->assertSame(0, $emptyStream->getSize());
+        $this->assertSame(14, $stringStream->getSize());
     }
 
     /**
-     * @api
+     * @since 0.1.0
      * @test
+     * @covers ::__construct
      * @covers ::tell
-     * @since 0.1.0
-     * @return void
      */
-    public function testTell()
+    public function shouldSetInitialPointerPosition(): void
     {
-        $this->assertSame(
-            0,
-            $this->stringStream->tell(),
-            'Should be able to determine the current position of the pointer'
-        );
+        $stringStream = new StringStream('Stream Content');
 
-        $this->stringStream->seek(4);
-        $this->assertSame(
-            4,
-            $this->stringStream->tell(),
-            'Should be able to determine the current position of the pointer'
-        );
+        $this->assertSame(0, $stringStream->tell());
     }
 
     /**
-     * @api
-     * @test
-     * @covers ::eof
      * @since 0.1.0
-     * @return void
-     */
-    public function testEof()
-    {
-        $this->assertFalse(
-            $this->stringStream->eof(),
-            'Should be able to tell if current pointer is at end of stream'
-        );
-
-        $this->stringStream->seek(0, SEEK_END);
-        $this->assertTrue(
-            $this->stringStream->eof(),
-            'Should be able to tell if current pointer is at end of stream'
-        );
-    }
-
-    /**
-     * @api
      * @test
      * @covers ::seek
-     * @since 0.1.0
-     * @return void
      */
-    public function testSeek()
+    public function shouldSeekToGivenPosition(): void
     {
-        $this->assertSame(0, $this->stringStream->tell(), 'Shoule be able to correctly seek the stream');
+        $stringStream = new StringStream('Stream Content');
 
-        $this->stringStream->seek(2, SEEK_SET);
-        $this->stringStream->seek(2);
-        $this->assertSame(2, $this->stringStream->tell(), 'Shoule be able to correctly seek the stream');
+        $stringStream->seek(4, SEEK_SET);
+        $this->assertSame(4, $stringStream->tell());
 
-        $this->stringStream->seek(0, SEEK_SET);
-        $this->stringStream->seek(2, SEEK_CUR);
-        $this->stringStream->seek(2, SEEK_CUR);
-        $this->assertSame(4, $this->stringStream->tell(), 'Shoule be able to correctly seek the stream');
-
-        $this->stringStream->seek(0, SEEK_END);
-        $this->assertSame(
-            strlen('This is a test string.'),
-            $this->stringStream->tell(),
-            'Shoule be able to correctly seek the stream'
-        );
-
-        $this->stringStream->seek(-4, SEEK_END);
-        $this->stringStream->seek(-4, SEEK_END);
-        $this->assertSame(
-            strlen('This is a test string.') - 4,
-            $this->stringStream->tell(),
-            'Shoule be able to correctly seek the stream'
-        );
+        $stringStream->seek(4, SEEK_SET);
+        $this->assertSame(4, $stringStream->tell());
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::seek
+     */
+    public function shouldSeekToPositionFromCurrentOffset(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+
+        $stringStream->seek(4, SEEK_CUR);
+        $this->assertSame(4, $stringStream->tell());
+
+        $stringStream->seek(4, SEEK_CUR);
+        $this->assertSame(8, $stringStream->tell());
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::seek
+     */
+    public function shouldSeekToPositionFromEnd(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+
+        $stringStream->seek(-4, SEEK_END);
+        $this->assertSame(10, $stringStream->tell());
+
+        $stringStream->seek(-4, SEEK_END);
+        $this->assertSame(10, $stringStream->tell());
+    }
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::seek
      * @expectedException RuntimeException
-     * @since 0.1.0
-     * @return void
      */
-    public function testInvalidSeek()
+    public function shouldThrowIfInvalidWhence(): void
     {
-        $this->stringStream->seek(0, 299);
+        $stringStream = new StringStream('Stream Content');
+        $stringStream->seek(0, 12);
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::seek
+     * @expectedException RuntimeException
+     */
+    public function shouldThrowIfInvalidOffset(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+        $stringStream->seek(20);
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::eof
+     */
+    public function shouldDetermineIfEof(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+
+        $this->assertFalse($stringStream->eof());
+
+        $stringStream->seek(0, SEEK_END);
+
+        $this->assertTrue($stringStream->eof());
+    }
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::rewind
-     * @since 0.1.0
-     * @return void
      */
-    public function testRewind()
+    public function shouldRewindStream(): void
     {
-        $this->stringStream->seek(4);
-        $this->stringStream->rewind();
+        $stringStream = new StringStream('Stream Content');
+        $stringStream->seek(4);
+        $this->assertSame(4, $stringStream->tell());
 
-        $this->assertSame(
-            0,
-            $this->stringStream->tell(),
-            'Shoule be able to rewind the stream'
-        );
+        $stringStream->rewind();
+
+        $this->assertSame(0, $stringStream->tell());
     }
 
     /**
-     * @api
-     * @test
-     * @covers ::write
      * @since 0.1.0
-     * @return void
-     */
-    public function testWrite()
-    {
-        $writeString = 'New content - ';
-
-        $response = $this->stringStream->write($writeString);
-
-        $this->assertSame(strlen($writeString), $response, 'Should be able to correctly write to the stream');
-        $this->assertSame(
-            'New content - This is a test string.',
-            (string) $this->stringStream,
-            'Should be able to correctly write to the stream'
-        );
-
-        $this->stringStream->seek(0, SEEK_END);
-        $this->stringStream->write('..');
-        $this->assertSame(
-            'New content - This is a test string...',
-            (string) $this->stringStream,
-            'Should be able to correctly write to the stream'
-        );
-    }
-
-    /**
-     * @api
      * @test
      * @covers ::read
-     * @since 0.1.0
-     * @return void
      */
-    public function testRead()
+    public function shouldReadGivenLengthOfBytes(): void
     {
-        $this->assertSame('This is', $this->stringStream->read(7), 'Should be able to correctly read from the stream');
+        $stringStream = new StringStream('Stream Content');
 
-        $this->stringStream->seek(7);
-        $this->assertSame(' a test', $this->stringStream->read(7), 'Should be able to correctly read from the stream');
+        $this->assertSame('Stream', $stringStream->read(6));
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::read
+     */
+    public function shouldReadGivenLengthOfBytesFromCurrentOffset(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+
+        $stringStream->seek(7);
+        $this->assertSame('Content', $stringStream->read(7));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::read
+     */
+    public function shouldReturnEmptyStringIfNoMoreBytesAvailable(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+        $emptyStream = new StringStream('');
+        $stringStream->seek(0, SEEK_END);
+
+        $this->assertSame('', $stringStream->read(20));
+        $this->assertSame('', $emptyStream->read(20));
+    }
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::getContents
-     * @since 0.1.0
-     * @return void
      */
-    public function testGetContents()
+    public function shouldReturnTheRemainingContent(): void
     {
-        $this->assertSame(
-            'This is a test string.',
-            $this->stringStream->getContents(),
-            'Should correctly return the remaining contents'
-        );
+        $stringStream = new StringStream('Stream Content');
+        $stringStream->seek(7);
 
-        $this->stringStream->seek(-4, SEEK_END);
-        $this->assertSame(
-            'ing.',
-            $this->stringStream->getContents(),
-            'Should correctly return the remaining contents'
-        );
+        $this->assertSame('Content', $stringStream->getContents());
     }
 
     /**
-     * @api
+     * @since 0.1.0
+     * @test
+     * @covers ::write
+     */
+    public function shouldWriteGivenData(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+
+        $stringStream->write('String ');
+
+        $this->assertSame('String Stream Content', (string)$stringStream);
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::write
+     */
+    public function shouldWriteGivenDataAtCurrentOffset(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+        $stringStream->seek(7);
+
+        $stringStream->write('String ');
+
+        $this->assertSame('Stream String Content', (string)$stringStream);
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::write
+     */
+    public function shouldReturnBytesWritten(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+
+        $bytesWritten = $stringStream->write('String ');
+
+        $this->assertSame(7, $bytesWritten);
+    }
+
+    /**
+     * @since 0.1.0
      * @test
      * @covers ::getMetadata
-     * @since 0.1.0
-     * @return void
      */
-    public function testGetMetadata()
+    public function shouldReturnMetadataArray(): void
     {
-        $this->assertEquals(
-            [
-                'timed_out' => false,
-                'blocked' => false,
-                'eof' => false,
-                'unread_bytes' => strlen('This is a test string.'),
-                'stream_type' => 'string',
-                'wrapper_type' => 'php://',
-                'wrapp_data' => null,
-                'mode' => 'r+',
-                'seekable' => true,
-                'uri' => ''
-            ],
-            $this->stringStream->getMetadata(),
-            'Should return correct metadata'
-        );
+        $stringStream = new StringStream('');
 
-        $this->stringStream->seek(12);
+        $this->assertEquals([
+            'timed_out' => false,
+            'blocked' => false,
+            'eof' => true,
+            'unread_bytes' => 0,
+            'stream_type' => 'string',
+            'wrapper_type' => 'php://',
+            'wrapper_data' => null,
+            'mode' => 'r+',
+            'seekable' => true,
+            'uri' => ''
+        ], $stringStream->getMetadata());
+    }
 
-        $this->assertFalse($this->stringStream->getMetadata('eof'), 'Should return correct metadata');
-        $this->assertSame(10, $this->stringStream->getMetadata('unread_bytes'), 'Should return correct metadata');
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getMetadata
+     */
+    public function shouldReturnMetadataValueByGivenKey(): void
+    {
+        $stringStream = new StringStream('');
 
-        $this->stringStream->seek(0, SEEK_END);
-        $this->assertTrue($this->stringStream->getMetadata('eof'), 'Should return correct metadata');
-        $this->assertSame(0, $this->stringStream->getMetadata('unread_bytes'), 'Should return correct metadata');
-        $this->assertNull($this->stringStream->getMetadata('non_existing_key'), 'Should return correct metadata');
+        $this->assertSame('string', $stringStream->getMetadata('stream_type'));
+    }
 
-        $this->stringStream->detach();
-        $this->assertSame('', $this->stringStream->getMetadata('mode'), 'Should return correct metadata');
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getMetadata
+     */
+    public function shouldReturnNullIfMetadataKeyNotFound(): void
+    {
+        $stringStream = new StringStream('');
+
+        $this->assertNull($stringStream->getMetadata('nokey'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getMetadata
+     */
+    public function shouldUpdateEofMetadata(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+
+        $this->assertFalse($stringStream->getMetadata('eof'));
+
+        $stringStream->seek(0, SEEK_END);
+
+        $this->assertTrue($stringStream->getMetadata('eof'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getMetadata
+     */
+    public function shouldUpdateUnreadBytesMetadata(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+        $stringStream->seek(7);
+
+        $this->assertSame(7, $stringStream->getMetadata('unread_bytes'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getMetadata
+     */
+    public function shouldUpdateModeMetadata(): void
+    {
+        $stringStream = new StringStream('');
+
+        $this->assertSame('r+', $stringStream->getMetadata('mode'));
+
+        $stringStream->close();
+
+        $this->assertSame('', $stringStream->getMetadata('mode'));
+    }
+
+    /**
+     * @since 0.1.0
+     * @test
+     * @covers ::getMetadata
+     */
+    public function shouldUpdateSeekableMetadata(): void
+    {
+        $stringStream = new StringStream('');
+
+        $this->assertTrue($stringStream->getMetadata('seekable'));
+
+        $stringStream->close();
+
+        $this->assertFalse($stringStream->getMetadata('seekable'));
     }
 }

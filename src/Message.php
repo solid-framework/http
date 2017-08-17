@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2016 Martin Pettersson
+ * Copyright (c) 2017 Martin Pettersson
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -9,8 +9,10 @@
 
 namespace Solid\Http;
 
+use InvalidArgumentException;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
+use Solid\Collection\CollectionInterface;
 
 /**
  * @package Solid\Http
@@ -20,43 +22,39 @@ use Psr\Http\Message\StreamInterface;
 class Message implements MessageInterface
 {
     /**
-     * @internal
      * @since 0.1.0
      * @var string
      */
     protected $protocolVersion;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var HeaderContainer
+     * @var \Solid\Collection\CollectionInterface
      */
     protected $headers;
 
     /**
-     * @internal
      * @since 0.1.0
-     * @var StreamInterface
+     * @var \Psr\Http\Message\StreamInterface
      */
     protected $body;
 
     /**
      * @api
      * @since 0.1.0
-     * @param string|null          $protocolVersion  The protocol version to use.
-     * @param HeaderContainer|null $headers          The request headers to use.
-     * @param StreamInterface|null $body             The request body to use.
+     * @param string                                $protocolVersion
+     * @param \Solid\Collection\CollectionInterface $headers
+     * @param \Psr\Http\Message\StreamInterface     $body
      */
-    public function __construct(
-        $protocolVersion = null,
-        HeaderContainer $headers = null,
-        StreamInterface $body = null
-    ) {
-        $this->protocolVersion = (string) ($protocolVersion ?? '1.1');
-        $this->headers = $headers ?? new HeaderContainer;
-        $this->body = $body ?? new StringStream;
+    public function __construct(string $protocolVersion, CollectionInterface $headers, StreamInterface $body)
+    {
+        $this->protocolVersion = $protocolVersion;
+        $this->headers = $headers;
+        $this->body = $body;
 
-        $this->headers->set('Content-Length', $this->body->getSize());
+        if (strlen($this->getHeaderLine('Content-Length')) === 0) {
+            $this->headers->set($this->getHeaderKey('Content-Length') ?? 'Content-Length', [$body->getSize() ?? 0]);
+        }
     }
 
     /**
@@ -82,15 +80,16 @@ class Message implements MessageInterface
     /**
      * @api
      * @since 0.1.0
-     * @param string $version HTTP protocol version
-     * @return self
+     * @param string $version
+     * @return \Solid\Http\Message
      */
-    public function withProtocolVersion($version): self
+    public function withProtocolVersion($version): Message
     {
-        $newMessage = clone $this;
-        $newMessage->protocolVersion = $version;
+        $message = clone $this;
 
-        return $newMessage;
+        $message->protocolVersion = $version;
+
+        return $message;
     }
 
     /**
@@ -100,92 +99,117 @@ class Message implements MessageInterface
      */
     public function getHeaders(): array
     {
-        return $this->headers->get();
+        return $this->headers->all();
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $name The header to check for.
+     * @param string $name
      * @return bool
      */
     public function hasHeader($name): bool
     {
-        return $this->headers->has($name);
+        return !is_null($this->getHeaderKey($name));
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $name The header to get.
+     * @param string $name
      * @return array
      */
     public function getHeader($name): array
     {
-        return $this->headers->get($name);
+        return (array)$this->headers->get($this->getHeaderKey($name) ?? $name, []);
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $name The header to get.
+     * @param string $name
      * @return string
      */
     public function getHeaderLine($name): string
     {
-        return implode(',', $this->headers->get($name));
+        return implode(',', (array)$this->headers->get($this->getHeaderKey($name) ?? $name, []));
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string          $name  Case-insensitive header field name.
-     * @param string|string[] $value Header value(s).
-     * @return self
-     * @throws InvalidArgumentException
+     * @param string       $name
+     * @param string|array $value
+     * @return \Solid\Http\Message
+     * @throws \InvalidArgumentException
      */
-    public function withHeader($name, $value): self
+    public function withHeader($name, $value): Message
     {
-        $newMessage = clone $this;
-        $newMessage->headers->set($name, $value);
+        if (!$this->isValidHeaderName($name)) {
+            throw new InvalidArgumentException('Invalid header name:' . $name);
+        }
 
-        return $newMessage;
+        if (!$this->isValidHeaderValue($value)) {
+            throw new InvalidArgumentException('Invalid header value:' . $value);
+        }
+
+        $message = clone $this;
+
+        $message->headers->set($this->getHeaderKey($name) ?? $name, (array)$value);
+
+        return $message;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string          $name  Case-insensitive header field name to add.
-     * @param string|string[] $value Header value(s).
-     * @return self
-     * @throws InvalidArgumentException
+     * @param string       $name
+     * @param string|array $value
+     * @return \Solid\Http\Message
+     * @throws \InvalidArgumentException
      */
-    public function withAddedHeader($name, $value): self
+    public function withAddedHeader($name, $value): Message
     {
-        $newMessage = clone $this;
-        $newMessage->headers->add($name, $value);
+        if (!$this->isValidHeaderName($name)) {
+            throw new InvalidArgumentException('Invalid header name:' . $name);
+        }
 
-        return $newMessage;
+        if (!$this->isValidHeaderValue($value)) {
+            throw new InvalidArgumentException('Invalid header value:' . $value);
+        }
+
+        $message = clone $this;
+
+        $header = $message->getHeader($name);
+
+        foreach ((array)$value as $v) {
+            $header[] = $v;
+        }
+
+        $message->headers->set($this->getHeaderKey($name) ?? $name, $header);
+
+        return $message;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @param string $name The header to remove.
-     * @return self
+     * @param string $name
+     * @return \Solid\Http\Message
      */
-    public function withoutHeader($name): self
+    public function withoutHeader($name): Message
     {
-        $newMessage = clone $this;
-        $newMessage->headers->remove($name);
+        $message = clone $this;
 
-        return $newMessage;
+        $message->headers->remove($this->getHeaderKey($name));
+
+        return $message;
     }
 
     /**
      * @api
      * @since 0.1.0
-     * @return StreamInterface
+     * @return \Psr\Http\Message\StreamInterface
      */
     public function getBody(): StreamInterface
     {
@@ -195,16 +219,53 @@ class Message implements MessageInterface
     /**
      * @api
      * @since 0.1.0
-     * @param StreamInterface $body The new body to use.
-     * @return self
-     * @throws InvalidArgumentException
+     * @param \Psr\Http\Message\StreamInterface $body
+     * @return \Solid\Http\Message
+     * @throws \InvalidArgumentException
      */
-    public function withBody(StreamInterface $body): self
+    public function withBody(StreamInterface $body): Message
     {
-        $newMessage = clone $this;
-        $newMessage->body = $body;
-        $newMessage->headers->set('Content-Length', $body->getSize());
+        $message = clone $this;
 
-        return $newMessage;
+        $message->body = $body;
+        $message->headers->set($this->getHeaderKey('Content-Length') ?? 'Content-Length', $body->getSize() ?? 0);
+
+        return $message;
+    }
+
+    /**
+     * @since 0.1.0
+     * @param string $name
+     * @return string|null
+     */
+    protected function getHeaderKey(string $name): ?string
+    {
+        foreach ($this->headers as $key => $value) {
+            if (strtolower($key) === strtolower($name)) {
+                return $key;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @since 0.1.0
+     * @param string $name
+     * @return bool
+     */
+    protected function isValidHeaderName(string $name): bool
+    {
+        return ctype_print($name);
+    }
+
+    /**
+     * @since 0.1.0
+     * @param string $value
+     * @return bool
+     */
+    protected function isValidHeaderValue(string $value): bool
+    {
+        return strpos($value, PHP_EOL) === false;
     }
 }

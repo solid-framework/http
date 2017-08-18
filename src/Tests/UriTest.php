@@ -479,7 +479,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withScheme
-     * @covers ::normalizeScheme
      */
     public function shouldReturnNewInstanceWithScheme(): void
     {
@@ -493,7 +492,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withScheme
-     * @covers ::normalizeScheme
      */
     public function shouldSanitizeSchemeForNewInstance(): void
     {
@@ -506,7 +504,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withScheme
-     * @covers ::normalizeScheme
      */
     public function withSchemeShouldPreserveTheOriginalUri(): void
     {
@@ -546,7 +543,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withHost
-     * @covers ::normalizeHost
      */
     public function shouldReturnNewInstanceWithHost(): void
     {
@@ -560,7 +556,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withHost
-     * @covers ::normalizeHost
      */
     public function shouldSanitizeHostForNewInstance(): void
     {
@@ -573,7 +568,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withHost
-     * @covers ::normalizeHost
      */
     public function withHostShouldPreserveTheOriginalUri(): void
     {
@@ -613,7 +607,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withPath
-     * @covers ::encodePath
      */
     public function shouldReturnNewInstanceWithPath(): void
     {
@@ -627,7 +620,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withPath
-     * @covers ::encodePath
      */
     public function shouldSanitizePathForNewInstance(): void
     {
@@ -640,7 +632,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withPath
-     * @covers ::encodePath
      */
     public function withPathShouldPreserveTheOriginalUri(): void
     {
@@ -654,7 +645,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withQuery
-     * @covers ::encodeQuery
      */
     public function shouldReturnNewInstanceWithQuery()
     {
@@ -668,7 +658,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withQuery
-     * @covers ::encodeQuery
      */
     public function shouldSanitizeQueryForNewInstance()
     {
@@ -681,7 +670,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withQuery
-     * @covers ::encodeQuery
      */
     public function withQueryShouldPreserveTheOriginalUri(): void
     {
@@ -695,7 +683,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withFragment
-     * @covers ::encodeFragment
      */
     public function shouldReturnNewInstanceWithFragment()
     {
@@ -709,7 +696,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withFragment
-     * @covers ::encodeFragment
      */
     public function shouldSanitizeFragmentForNewInstance()
     {
@@ -722,7 +708,6 @@ class UriTest extends TestCase
     /**
      * @test
      * @covers ::withFragment
-     * @covers ::encodeFragment
      */
     public function withFragmentShouldPreserveTheOriginalUri(): void
     {

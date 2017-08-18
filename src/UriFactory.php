@@ -15,7 +15,7 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * @package Solid\Http
- * @author  Martin Pettersson <martin@solid-framework.com>
+ * @author Martin Pettersson <martin@solid-framework.com>
  */
 class UriFactory implements UriFactoryInterface
 {

@@ -14,8 +14,8 @@ use Solid\Http\UriFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @package            Solid\Http\Tests
- * @author             Martin Pettersson <martin@solid-framework.com>
+ * @package Solid\Http\Tests
+ * @author Martin Pettersson <martin@solid-framework.com>
  * @coversDefaultClass Solid\Http\UriFactory
  */
 class UriFactoryTest extends TestCase

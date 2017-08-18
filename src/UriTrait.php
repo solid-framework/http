@@ -11,7 +11,7 @@ namespace Solid\Http;
 
 /**
  * @package Solid\Http
- * @author  Martin Pettersson <martin@solid-framework.com>
+ * @author Martin Pettersson <martin@solid-framework.com>
  */
 trait UriTrait
 {

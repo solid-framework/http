@@ -485,7 +485,7 @@ class UriTest extends TestCase
         $uri = new Uri('http', null, null, 'solid-framework.com');
         $uriWithHttps = $uri->withScheme('https');
 
-        $this->assertInstanceOf(Uri::class, $uriWithHttps);
+        $this->assertInstanceOf(UriInterface::class, $uriWithHttps);
         $this->assertSame('https', $uriWithHttps->getScheme());
     }
 
@@ -523,7 +523,7 @@ class UriTest extends TestCase
         $uri = new Uri(null, 'username', 'password', 'solid-framework.com');
         $uriWithUserInfo = $uri->withUserInfo('new-user', 'new-password');
 
-        $this->assertInstanceOf(Uri::class, $uriWithUserInfo);
+        $this->assertInstanceOf(UriInterface::class, $uriWithUserInfo);
         $this->assertSame('new-user:new-password', $uriWithUserInfo->getUserInfo());
     }
 
@@ -549,7 +549,7 @@ class UriTest extends TestCase
         $uri = new Uri(null, null, null, 'solid-framework.com');
         $uriWithHost = $uri->withHost('another-framework.com');
 
-        $this->assertInstanceOf(Uri::class, $uriWithHost);
+        $this->assertInstanceOf(UriInterface::class, $uriWithHost);
         $this->assertSame('another-framework.com', $uriWithHost->getHost());
     }
 
@@ -587,7 +587,7 @@ class UriTest extends TestCase
         $uri = new Uri(null, null, null, null, 8080);
         $uriWithPort = $uri->withPort(8081);
 
-        $this->assertInstanceOf(Uri::class, $uriWithPort);
+        $this->assertInstanceOf(UriInterface::class, $uriWithPort);
         $this->assertSame(8081, $uriWithPort->getPort());
     }
 
@@ -613,7 +613,7 @@ class UriTest extends TestCase
         $uri = new Uri(null, null, null, null, null, '/path');
         $uriWithPath = $uri->withPath('/new/path');
 
-        $this->assertInstanceOf(Uri::class, $uriWithPath);
+        $this->assertInstanceOf(UriInterface::class, $uriWithPath);
         $this->assertSame('/new/path', $uriWithPath->getPath());
     }
 
@@ -651,7 +651,7 @@ class UriTest extends TestCase
         $uri = new Uri(null, null, null, null, null, null, 'key=value');
         $uriWithQuery = $uri->withQuery('new-key=new-value');
 
-        $this->assertInstanceOf(Uri::class, $uriWithQuery);
+        $this->assertInstanceOf(UriInterface::class, $uriWithQuery);
         $this->assertSame('new-key=new-value', $uriWithQuery->getQuery());
     }
 
@@ -689,7 +689,7 @@ class UriTest extends TestCase
         $uri = new Uri(null, null, null, null, null, null, null, 'fragment');
         $uriWithFragment = $uri->withFragment('new-fragment');
 
-        $this->assertInstanceOf(Uri::class, $uriWithFragment);
+        $this->assertInstanceOf(UriInterface::class, $uriWithFragment);
         $this->assertSame('new-fragment', $uriWithFragment->getFragment());
     }
 

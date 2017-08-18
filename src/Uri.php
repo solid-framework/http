@@ -225,10 +225,10 @@ class Uri implements UriInterface
 
     /**
      * @param string $scheme
-     * @return \Solid\Http\Uri
+     * @return \Psr\Http\Message\UriInterface
      * @throws \InvalidArgumentException
      */
-    public function withScheme($scheme): Uri
+    public function withScheme($scheme): UriInterface
     {
         $uri = clone $this;
 
@@ -240,9 +240,9 @@ class Uri implements UriInterface
     /**
      * @param string      $user
      * @param string|null $password
-     * @return \Solid\Http\Uri
+     * @return \Psr\Http\Message\UriInterface
      */
-    public function withUserInfo($user, $password = null): Uri
+    public function withUserInfo($user, $password = null): UriInterface
     {
         $uri = clone $this;
 
@@ -254,10 +254,10 @@ class Uri implements UriInterface
 
     /**
      * @param string $host
-     * @return \Solid\Http\Uri
+     * @return \Psr\Http\Message\UriInterface
      * @throws \InvalidArgumentException
      */
-    public function withHost($host): Uri
+    public function withHost($host): UriInterface
     {
         $uri = clone $this;
 
@@ -268,10 +268,10 @@ class Uri implements UriInterface
 
     /**
      * @param int|null $port
-     * @return \Solid\Http\Uri
+     * @return \Psr\Http\Message\UriInterface
      * @throws \InvalidArgumentException
      */
-    public function withPort($port): Uri
+    public function withPort($port): UriInterface
     {
         $uri = clone $this;
 
@@ -282,10 +282,10 @@ class Uri implements UriInterface
 
     /**
      * @param string $path
-     * @return \Solid\Http\Uri
+     * @return \Psr\Http\Message\UriInterface
      * @throws \InvalidArgumentException
      */
-    public function withPath($path): Uri
+    public function withPath($path): UriInterface
     {
         $uri = clone $this;
 
@@ -296,10 +296,10 @@ class Uri implements UriInterface
 
     /**
      * @param string $query
-     * @return \Solid\Http\Uri
+     * @return \Psr\Http\Message\UriInterface
      * @throws \InvalidArgumentException
      */
-    public function withQuery($query): Uri
+    public function withQuery($query): UriInterface
     {
         $uri = clone $this;
 
@@ -310,9 +310,9 @@ class Uri implements UriInterface
 
     /**
      * @param string $fragment
-     * @return \Solid\Http\Uri
+     * @return \Psr\Http\Message\UriInterface
      */
-    public function withFragment($fragment): Uri
+    public function withFragment($fragment): UriInterface
     {
         $uri = clone $this;
 

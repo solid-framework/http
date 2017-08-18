@@ -56,7 +56,7 @@ class MessageTest extends TestCase
 
         $messageWithProtocolVersion = $message->withProtocolVersion('2.0');
 
-        $this->assertInstanceOf(Message::class, $messageWithProtocolVersion);
+        $this->assertInstanceOf(MessageInterface::class, $messageWithProtocolVersion);
         $this->assertSame('2.0', $messageWithProtocolVersion->getProtocolVersion());
     }
 
@@ -269,7 +269,7 @@ class MessageTest extends TestCase
 
         $messageWithHeader = $message->withHeader('header-name', 'new-value-1');
 
-        $this->assertInstanceOf(Message::class, $messageWithHeader);
+        $this->assertInstanceOf(MessageInterface::class, $messageWithHeader);
         $this->assertCount(0, $messageWithHeader->getHeader('Another-Header'));
         $this->assertCount(1, $messageWithHeader->getHeader('header-name'));
         $this->assertContains('new-value-1', $messageWithHeader->getHeader('header-name'));
@@ -373,7 +373,7 @@ class MessageTest extends TestCase
 
         $messageWithAddedHeader = $message->withAddedHeader('header-name', 'header-value-2');
 
-        $this->assertInstanceOf(Message::class, $messageWithAddedHeader);
+        $this->assertInstanceOf(MessageInterface::class, $messageWithAddedHeader);
         $this->assertCount(2, $messageWithAddedHeader->getHeader('header-name'));
         $this->assertContains('header-value-1', $messageWithAddedHeader->getHeader('header-name'));
         $this->assertContains('header-value-2', $messageWithAddedHeader->getHeader('header-name'));
@@ -483,7 +483,7 @@ class MessageTest extends TestCase
 
         $messageWithoutHeader = $message->withoutHeader('header-name');
 
-        $this->assertInstanceOf(Message::class, $messageWithoutHeader);
+        $this->assertInstanceOf(MessageInterface::class, $messageWithoutHeader);
         $this->assertFalse($messageWithoutHeader->hasHeader('header-name'));
         $this->assertTrue($messageWithoutHeader->hasHeader('Another-Header'));
     }
@@ -563,7 +563,7 @@ class MessageTest extends TestCase
         /** @noinspection PhpParamsInspection */
         $messageWithBody = $message->withBody($bodyMock2);
 
-        $this->assertInstanceOf(Message::class, $messageWithBody);
+        $this->assertInstanceOf(MessageInterface::class, $messageWithBody);
         $this->assertSame($bodyMock2, $messageWithBody->getBody());
     }
 

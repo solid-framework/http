@@ -100,9 +100,9 @@ class Request extends Message implements RequestInterface
 
     /**
      * @param mixed $requestTarget
-     * @return \Solid\Http\Request
+     * @return \Psr\Http\Message\RequestInterface
      */
-    public function withRequestTarget($requestTarget): Request
+    public function withRequestTarget($requestTarget): RequestInterface
     {
         $request = clone $this;
 
@@ -121,12 +121,12 @@ class Request extends Message implements RequestInterface
 
     /**
      * @param string $method
-     * @return \Solid\Http\Request
+     * @return \Psr\Http\Message\RequestInterface
      * @throws \InvalidArgumentException
      */
-    public function withMethod($method): Request
+    public function withMethod($method): RequestInterface
     {
-        if (!in_array(strtolower($method), array_map('strtolower', RequestMethods::values()))) {
+        if (!in_array(strtolower($method), array_map('strtolower', RequestMethod::values()))) {
             throw new InvalidArgumentException("The method: {$method} is not a valid HTTP request method");
         }
 
@@ -148,9 +148,9 @@ class Request extends Message implements RequestInterface
     /**
      * @param \Psr\Http\Message\UriInterface $uri
      * @param bool                           $preserveHost
-     * @return Request
+     * @return \Psr\Http\Message\RequestInterface
      */
-    public function withUri(UriInterface $uri, $preserveHost = false): Request
+    public function withUri(UriInterface $uri, $preserveHost = false): RequestInterface
     {
         $request = clone $this;
 

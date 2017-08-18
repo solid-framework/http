@@ -67,9 +67,9 @@ class Message implements MessageInterface
 
     /**
      * @param string $version
-     * @return \Solid\Http\Message
+     * @return \Psr\Http\Message\MessageInterface
      */
-    public function withProtocolVersion($version): Message
+    public function withProtocolVersion($version): MessageInterface
     {
         $message = clone $this;
 
@@ -116,10 +116,10 @@ class Message implements MessageInterface
     /**
      * @param string       $name
      * @param string|array $value
-     * @return \Solid\Http\Message
+     * @return \Psr\Http\Message\MessageInterface
      * @throws \InvalidArgumentException
      */
-    public function withHeader($name, $value): Message
+    public function withHeader($name, $value): MessageInterface
     {
         if (!$this->isValidHeaderName($name)) {
             throw new InvalidArgumentException('Invalid header name:' . $name);
@@ -139,10 +139,10 @@ class Message implements MessageInterface
     /**
      * @param string       $name
      * @param string|array $value
-     * @return \Solid\Http\Message
+     * @return \Psr\Http\Message\MessageInterface
      * @throws \InvalidArgumentException
      */
-    public function withAddedHeader($name, $value): Message
+    public function withAddedHeader($name, $value): MessageInterface
     {
         if (!$this->isValidHeaderName($name)) {
             throw new InvalidArgumentException('Invalid header name:' . $name);
@@ -167,9 +167,9 @@ class Message implements MessageInterface
 
     /**
      * @param string $name
-     * @return \Solid\Http\Message
+     * @return \Psr\Http\Message\MessageInterface
      */
-    public function withoutHeader($name): Message
+    public function withoutHeader($name): MessageInterface
     {
         $message = clone $this;
 
@@ -188,10 +188,10 @@ class Message implements MessageInterface
 
     /**
      * @param \Psr\Http\Message\StreamInterface $body
-     * @return \Solid\Http\Message
+     * @return \Psr\Http\Message\MessageInterface
      * @throws \InvalidArgumentException
      */
-    public function withBody(StreamInterface $body): Message
+    public function withBody(StreamInterface $body): MessageInterface
     {
         $message = clone $this;
 

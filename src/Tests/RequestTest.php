@@ -105,7 +105,7 @@ class RequestTest extends TestCase
 
         $requestWithTarget = $request->withRequestTarget('target');
 
-        $this->assertInstanceOf(Request::class, $requestWithTarget);
+        $this->assertInstanceOf(RequestInterface::class, $requestWithTarget);
         $this->assertSame('target', $requestWithTarget->getRequestTarget());
     }
 
@@ -152,7 +152,7 @@ class RequestTest extends TestCase
 
         $requestWithMethod = $request->withMethod('POST');
 
-        $this->assertInstanceOf(Request::class, $requestWithMethod);
+        $this->assertInstanceOf(RequestInterface::class, $requestWithMethod);
         $this->assertSame('POST', $requestWithMethod->getMethod());
     }
 

@@ -15,43 +15,35 @@ use RuntimeException;
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  */
 class StringStream implements StreamInterface
 {
     /**
-     * @since 0.1.0
      * @var string
      */
     protected $content;
 
     /**
-     * @since 0.1.0
      * @var int
      */
     protected $pointer;
 
     /**
-     * @since 0.1.0
      * @var bool
      */
     protected $isReadable;
 
     /**
-     * @since 0.1.0
      * @var bool
      */
     protected $isWritable;
 
     /**
-     * @since 0.1.0
      * @var bool
      */
     protected $isSeekable;
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $content
      */
     public function __construct(string $content = '')
@@ -64,8 +56,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function __toString(): string
@@ -73,10 +63,6 @@ class StringStream implements StreamInterface
         return $this->content;
     }
 
-    /**
-     * @api
-     * @since 0.1.0
-     */
     public function close(): void
     {
         $this->content = '';
@@ -86,8 +72,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return resource|null
      */
     public function detach()
@@ -98,8 +82,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return int|null
      */
     public function getSize(): ?int
@@ -108,8 +90,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return int
      * @throws \RuntimeException
      */
@@ -119,8 +99,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return bool
      */
     public function eof(): bool
@@ -129,8 +107,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return bool
      */
     public function isSeekable(): bool
@@ -139,8 +115,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param int $offset
      * @param int $whence
      * @throws \RuntimeException
@@ -169,8 +143,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @throws \RuntimeException
      */
     public function rewind(): void
@@ -179,8 +151,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return bool
      */
     public function isWritable(): bool
@@ -189,8 +159,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $string
      * @return int
      * @throws \RuntimeException
@@ -203,8 +171,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return bool
      */
     public function isReadable(): bool
@@ -213,8 +179,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param int $length
      * @return string
      * @throws \RuntimeException
@@ -225,8 +189,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      * @throws \RuntimeException
      */
@@ -236,8 +198,6 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $key
      * @return mixed
      */

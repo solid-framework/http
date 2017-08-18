@@ -16,7 +16,6 @@ use Psr\Http\Message\MessageInterface;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  * @coversDefaultClass Solid\Http\Message
  */
 class MessageTest extends TestCase
@@ -24,7 +23,6 @@ class MessageTest extends TestCase
     use MockGeneratorTrait;
 
     /**
-     * @since 0.1.0
      * @test
      * @coversNothing
      */
@@ -34,7 +32,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getProtocolVersion
      * @covers ::__construct
@@ -48,7 +45,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withProtocolVersion
      * @covers ::getProtocolVersion
@@ -65,7 +61,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withProtocolVersion
      */
@@ -81,7 +76,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHeaders
      * @covers ::__construct
@@ -104,7 +98,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::hasHeader
      */
@@ -127,7 +120,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::hasHeader
      * @covers ::getHeaderKey
@@ -148,7 +140,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHeader
      */
@@ -172,7 +163,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHeader
      */
@@ -186,7 +176,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHeader
      * @covers ::getHeaderKey
@@ -206,7 +195,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHeaderLine
      */
@@ -228,7 +216,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHeaderLine
      */
@@ -241,7 +228,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHeaderLine
      * @covers ::getHeaderKey
@@ -263,7 +249,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHeader
      * @covers ::isValidHeaderName
@@ -291,7 +276,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHeader
      * @covers ::isValidHeaderName
@@ -310,7 +294,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHeader
      * @covers ::isValidHeaderName
@@ -325,7 +308,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHeader
      * @covers ::isValidHeaderValue
@@ -340,7 +322,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHeader
      * @covers ::__clone
@@ -357,7 +338,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHeader
      * @covers ::getHeaderKey
@@ -375,7 +355,6 @@ class MessageTest extends TestCase
 
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withAddedHeader
      * @covers ::isValidHeaderName
@@ -401,7 +380,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withAddedHeader
      * @covers ::isValidHeaderName
@@ -420,7 +398,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withAddedHeader
      * @covers ::isValidHeaderName
@@ -435,7 +412,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withAddedHeader
      * @covers ::isValidHeaderValue
@@ -450,7 +426,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withAddedHeader
      * @covers ::__clone
@@ -467,7 +442,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withAddedHeader
      * @covers ::getHeaderKey
@@ -491,7 +465,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withoutHeader
      */
@@ -516,7 +489,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withoutHeader
      * @covers ::__clone
@@ -538,7 +510,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withoutHeader
      * @covers ::getHeaderKey
@@ -563,7 +534,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getBody
      * @covers ::__construct
@@ -579,7 +549,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withBody
      */
@@ -599,7 +568,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withBody
      * @covers ::__clone
@@ -620,7 +588,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withBody
      */
@@ -642,7 +609,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withBody
      */
@@ -658,7 +624,6 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withBody
      */

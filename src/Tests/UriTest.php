@@ -16,13 +16,11 @@ use Psr\Http\Message\UriInterface;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  * @coversDefaultClass Solid\Http\Uri
  */
 class UriTest extends TestCase
 {
     /**
-     * @since 0.1.0
      * @test
      * @coversNothing
      */
@@ -32,7 +30,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getScheme
      * @covers ::__construct
@@ -45,7 +42,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getScheme
      * @covers ::__construct
@@ -58,7 +54,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getScheme
      * @covers ::__construct
@@ -71,7 +66,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHost
      * @covers ::__construct
@@ -84,7 +78,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHost
      * @covers ::__construct
@@ -97,7 +90,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getHost
      * @covers ::__construct
@@ -110,7 +102,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPort
      * @covers ::__construct
@@ -124,7 +115,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPort
      * @covers ::__construct
@@ -138,7 +128,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPort
      * @covers ::__construct
@@ -154,7 +143,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPort
      * @covers ::__construct
@@ -167,7 +155,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPort
      * @covers ::__construct
@@ -181,7 +168,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPath
      * @covers ::__construct
@@ -194,7 +180,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPath
      * @covers ::__construct
@@ -207,7 +192,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPath
      * @covers ::__construct
@@ -222,7 +206,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPath
      * @covers ::__construct
@@ -235,7 +218,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getPath
      * @covers ::__construct
@@ -248,7 +230,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getQuery
      * @covers ::__construct
@@ -261,7 +242,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getQuery
      * @covers ::__construct
@@ -274,7 +254,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getQuery
      * @covers ::__construct
@@ -287,7 +266,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getQuery
      * @covers ::__construct
@@ -300,7 +278,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getFragment
      * @covers ::__construct
@@ -313,7 +290,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getFragment
      * @covers ::__construct
@@ -326,7 +302,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getFragment
      * @covers ::__construct
@@ -339,7 +314,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getFragment
      * @covers ::__construct
@@ -352,7 +326,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getUserInfo
      * @covers ::__construct
@@ -365,7 +338,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getUserInfo
      * @covers ::__construct
@@ -378,7 +350,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getUserInfo
      * @covers ::__construct
@@ -391,7 +362,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getAuthority
      * @covers ::__construct
@@ -404,7 +374,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getAuthority
      * @covers ::__construct
@@ -417,7 +386,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getAuthority
      * @covers ::__construct
@@ -430,7 +398,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getAuthority
      * @covers ::__construct
@@ -443,7 +410,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::__toString
      * @covers ::__construct
@@ -511,7 +477,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withScheme
      * @covers ::normalizeScheme
@@ -526,7 +491,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withScheme
      * @covers ::normalizeScheme
@@ -540,7 +504,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withScheme
      * @covers ::normalizeScheme
@@ -555,7 +518,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withUserInfo
      */
@@ -569,7 +531,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withUserInfo
      */
@@ -583,7 +544,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHost
      * @covers ::normalizeHost
@@ -598,7 +558,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHost
      * @covers ::normalizeHost
@@ -612,7 +571,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withHost
      * @covers ::normalizeHost
@@ -627,7 +585,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withPort
      */
@@ -641,7 +598,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withPort
      */
@@ -655,7 +611,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withPath
      * @covers ::encodePath
@@ -670,7 +625,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withPath
      * @covers ::encodePath
@@ -684,7 +638,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withPath
      * @covers ::encodePath
@@ -699,7 +652,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withQuery
      * @covers ::encodeQuery
@@ -714,7 +666,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withQuery
      * @covers ::encodeQuery
@@ -728,7 +679,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withQuery
      * @covers ::encodeQuery
@@ -743,7 +693,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withFragment
      * @covers ::encodeFragment
@@ -758,7 +707,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withFragment
      * @covers ::encodeFragment
@@ -772,7 +720,6 @@ class UriTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withFragment
      * @covers ::encodeFragment

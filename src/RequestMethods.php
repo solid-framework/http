@@ -14,7 +14,6 @@ use Solid\Collection\Enum;
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  */
 class RequestMethods extends Enum
 {

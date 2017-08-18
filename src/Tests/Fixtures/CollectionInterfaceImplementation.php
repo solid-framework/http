@@ -17,7 +17,6 @@ use Traversable;
 /**
  * @package Solid\Http\Tests\Fixtures
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  */
 class CollectionInterfaceImplementation implements CollectionInterface
 {

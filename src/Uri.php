@@ -14,7 +14,6 @@ use Psr\Http\Message\UriInterface;
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  * @todo Throw appropriate exceptions.
  */
 class Uri implements UriInterface
@@ -22,56 +21,46 @@ class Uri implements UriInterface
     use UriTrait;
 
     /**
-     * @since 0.1.0
      * @var string|null
      */
     protected $scheme;
 
     /**
-     * @since 0.1.0
      * @var string|null
      */
     protected $username;
 
     /**
-     * @since 0.1.0
      * @var string|null
      */
     protected $password;
 
     /**
-     * @since 0.1.0
      * @var string|null
      */
     protected $host;
 
     /**
-     * @since 0.1.0
      * @var int|null
      */
     protected $port;
 
     /**
-     * @since 0.1.0
      * @var string|null
      */
     protected $path;
 
     /**
-     * @since 0.1.0
      * @var string|null
      */
     protected $query;
 
     /**
-     * @since 0.1.0
      * @var string|null
      */
     protected $fragment;
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string|null $scheme
      * @param string|null $username
      * @param string|null $password
@@ -102,8 +91,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function __toString(): string
@@ -145,8 +132,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getScheme(): string
@@ -155,8 +140,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getAuthority(): string
@@ -183,8 +166,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getUserInfo(): string
@@ -199,8 +180,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getHost(): string
@@ -209,8 +188,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return int|null
      */
     public function getPort(): ?int
@@ -223,8 +200,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getPath(): string
@@ -233,8 +208,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getQuery(): string
@@ -243,8 +216,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getFragment(): string
@@ -253,8 +224,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $scheme
      * @return \Solid\Http\Uri
      * @throws \InvalidArgumentException
@@ -269,8 +238,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string      $user
      * @param string|null $password
      * @return \Solid\Http\Uri
@@ -286,8 +253,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $host
      * @return \Solid\Http\Uri
      * @throws \InvalidArgumentException
@@ -302,8 +267,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param int|null $port
      * @return \Solid\Http\Uri
      * @throws \InvalidArgumentException
@@ -318,8 +281,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $path
      * @return \Solid\Http\Uri
      * @throws \InvalidArgumentException
@@ -334,8 +295,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $query
      * @return \Solid\Http\Uri
      * @throws \InvalidArgumentException
@@ -350,8 +309,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $fragment
      * @return \Solid\Http\Uri
      */
@@ -365,7 +322,6 @@ class Uri implements UriInterface
     }
 
     /**
-     * @since 0.1.0
      * @param int $port
      * @return bool
      */

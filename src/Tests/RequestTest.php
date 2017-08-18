@@ -16,7 +16,6 @@ use Psr\Http\Message\RequestInterface;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  * @coversDefaultClass Solid\Http\Request
  */
 class RequestTest extends TestCase
@@ -24,7 +23,6 @@ class RequestTest extends TestCase
     use MockGeneratorTrait;
 
     /**
-     * @since 0.1.0
      * @test
      * @coversNothing
      */
@@ -34,7 +32,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getRequestTarget
      * @covers ::__construct
@@ -80,7 +77,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getRequestTarget
      */
@@ -99,7 +95,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withRequestTarget
      */
@@ -115,7 +110,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withRequestTarget
      */
@@ -135,7 +129,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getMethod
      * @covers ::__construct
@@ -149,7 +142,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withMethod
      */
@@ -165,7 +157,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withMethod
      */
@@ -180,7 +171,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withMethod
      */
@@ -196,7 +186,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withMethod
      * @expectedException \InvalidArgumentException
@@ -210,7 +199,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getUri
      */
@@ -225,7 +213,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withUri
      */
@@ -243,7 +230,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withUri
      */
@@ -262,7 +248,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withUri
      */
@@ -283,7 +268,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withUri
      */
@@ -313,7 +297,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withUri
      */
@@ -343,7 +326,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::withUri
      */
@@ -370,7 +352,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::__construct
      */
@@ -388,7 +369,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::__construct
      */
@@ -409,7 +389,6 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::__toString
      */

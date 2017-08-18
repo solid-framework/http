@@ -16,13 +16,11 @@ use Psr\Http\Message\StreamInterface;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  * @coversDefaultClass Solid\Http\StringStream
  */
 class StringStreamTest extends TestCase
 {
     /**
-     * @since 0.1.0
      * @test
      * @coversNothing
      */
@@ -32,7 +30,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::__construct
      * @covers ::__toString
@@ -46,7 +43,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::__construct
      * @covers ::__toString
@@ -59,7 +55,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::__construct
      * @covers ::isReadable
@@ -76,7 +71,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::close
      */
@@ -93,7 +87,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::detach
      */
@@ -111,7 +104,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getSize
      */
@@ -125,7 +117,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::__construct
      * @covers ::tell
@@ -138,7 +129,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::seek
      */
@@ -154,7 +144,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::seek
      */
@@ -170,7 +159,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::seek
      */
@@ -186,7 +174,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::seek
      * @expectedException \RuntimeException
@@ -198,7 +185,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::seek
      * @expectedException \RuntimeException
@@ -210,7 +196,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::eof
      */
@@ -226,7 +211,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::rewind
      */
@@ -242,7 +226,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::read
      */
@@ -254,7 +237,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::read
      */
@@ -267,7 +249,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::read
      */
@@ -282,7 +263,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getContents
      */
@@ -295,7 +275,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::write
      */
@@ -309,7 +288,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::write
      */
@@ -324,7 +302,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::write
      */
@@ -338,7 +315,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getMetadata
      */
@@ -361,7 +337,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getMetadata
      */
@@ -373,7 +348,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getMetadata
      */
@@ -385,7 +359,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getMetadata
      */
@@ -401,7 +374,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getMetadata
      */
@@ -414,7 +386,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getMetadata
      */
@@ -430,7 +401,6 @@ class StringStreamTest extends TestCase
     }
 
     /**
-     * @since 0.1.0
      * @test
      * @covers ::getMetadata
      */

@@ -20,12 +20,10 @@ use ReflectionClass;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  */
 trait MockGeneratorTrait
 {
     /**
-     * @since 0.1.0
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getUriMock(): PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +35,6 @@ trait MockGeneratorTrait
     }
 
     /**
-     * @since 0.1.0
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getHeadersMock(): PHPUnit_Framework_MockObject_MockObject
@@ -52,7 +49,6 @@ trait MockGeneratorTrait
     }
 
     /**
-     * @since 0.1.0a
      * @param array $defaultStore
      * @return \Solid\Collection\CollectionInterface
      */
@@ -62,7 +58,6 @@ trait MockGeneratorTrait
     }
 
     /**
-     * @since 0.1.0
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getBodyMock(): PHPUnit_Framework_MockObject_MockObject

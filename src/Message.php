@@ -17,31 +17,25 @@ use Solid\Collection\CollectionInterface;
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  */
 class Message implements MessageInterface
 {
     /**
-     * @since 0.1.0
      * @var string
      */
     protected $protocolVersion;
 
     /**
-     * @since 0.1.0
      * @var \Solid\Collection\CollectionInterface
      */
     protected $headers;
 
     /**
-     * @since 0.1.0
      * @var \Psr\Http\Message\StreamInterface
      */
     protected $body;
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string                                $protocolVersion
      * @param \Solid\Collection\CollectionInterface $headers
      * @param \Psr\Http\Message\StreamInterface     $body
@@ -57,10 +51,6 @@ class Message implements MessageInterface
         }
     }
 
-    /**
-     * @api
-     * @since 0.1.0
-     */
     public function __clone()
     {
         $this->headers = clone $this->headers;
@@ -68,8 +58,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getProtocolVersion(): string
@@ -78,8 +66,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $version
      * @return \Solid\Http\Message
      */
@@ -93,8 +79,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return array
      */
     public function getHeaders(): array
@@ -103,8 +87,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $name
      * @return bool
      */
@@ -114,8 +96,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $name
      * @return array
      */
@@ -125,8 +105,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $name
      * @return string
      */
@@ -136,8 +114,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string       $name
      * @param string|array $value
      * @return \Solid\Http\Message
@@ -161,8 +137,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string       $name
      * @param string|array $value
      * @return \Solid\Http\Message
@@ -192,8 +166,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $name
      * @return \Solid\Http\Message
      */
@@ -207,8 +179,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return \Psr\Http\Message\StreamInterface
      */
     public function getBody(): StreamInterface
@@ -217,8 +187,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param \Psr\Http\Message\StreamInterface $body
      * @return \Solid\Http\Message
      * @throws \InvalidArgumentException
@@ -234,7 +202,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @since 0.1.0
      * @param string $name
      * @return string|null
      */
@@ -250,7 +217,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @since 0.1.0
      * @param string $name
      * @return bool
      */
@@ -260,7 +226,6 @@ class Message implements MessageInterface
     }
 
     /**
-     * @since 0.1.0
      * @param string $value
      * @return bool
      */

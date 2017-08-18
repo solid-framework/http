@@ -16,7 +16,6 @@ namespace Solid\Http;
 trait UriTrait
 {
     /**
-     * @since 0.1.0
      * @param string $scheme
      * @return string
      */
@@ -26,7 +25,6 @@ trait UriTrait
     }
 
     /**
-     * @since 0.1.0
      * @param string $host
      * @return string
      */
@@ -36,7 +34,6 @@ trait UriTrait
     }
 
     /**
-     * @since 0.1.0
      * @param string $path
      * @return string
      */
@@ -46,7 +43,6 @@ trait UriTrait
     }
 
     /**
-     * @since 0.1.0
      * @param string $query
      * @return string
      */
@@ -58,7 +54,6 @@ trait UriTrait
     }
 
     /**
-     * @since 0.1.0
      * @param string $fragment
      * @return string
      */

@@ -18,31 +18,25 @@ use Solid\Collection\CollectionInterface;
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
- * @since 0.1.0
  */
 class Request extends Message implements RequestInterface
 {
     /**
-     * @since 0.1.0
      * @var string
      */
     protected $method;
 
     /**
-     * @since 0.1.0
      * @var \Psr\Http\Message\UriInterface
      */
     protected $uri;
 
     /**
-     * @since 0.1.0
      * @var string
      */
     protected $target;
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string                                $method
      * @param \Psr\Http\Message\UriInterface        $uri
      * @param string                                $protocolVersion
@@ -69,7 +63,6 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @since 0.1.0
      * @return string
      */
     public function __toString(): string
@@ -87,8 +80,6 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getRequestTarget(): string
@@ -108,7 +99,6 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @api
      * @param mixed $requestTarget
      * @return \Solid\Http\Request
      */
@@ -122,8 +112,6 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return string
      */
     public function getMethod(): string
@@ -132,8 +120,6 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param string $method
      * @return \Solid\Http\Request
      * @throws \InvalidArgumentException
@@ -152,8 +138,6 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @return \Psr\Http\Message\UriInterface
      */
     public function getUri(): UriInterface
@@ -162,8 +146,6 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @api
-     * @since 0.1.0
      * @param \Psr\Http\Message\UriInterface $uri
      * @param bool                           $preserveHost
      * @return Request

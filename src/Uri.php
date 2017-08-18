@@ -19,6 +19,8 @@ use Psr\Http\Message\UriInterface;
  */
 class Uri implements UriInterface
 {
+    use UriTrait;
+
     /**
      * @since 0.1.0
      * @var string|null
@@ -80,23 +82,23 @@ class Uri implements UriInterface
      * @param string|null $fragment
      */
     public function __construct(
-        ?string $scheme,
-        ?string $username,
-        ?string $password,
-        ?string $host,
-        ?int $port,
-        ?string $path,
-        ?string $query,
-        ?string $fragment
+        ?string $scheme = null,
+        ?string $username = null,
+        ?string $password = null,
+        ?string $host = null,
+        ?int $port = null,
+        ?string $path = null,
+        ?string $query = null,
+        ?string $fragment = null
     ) {
-        $this->scheme = $scheme;
+        $this->scheme = !is_null($scheme) ? $this->normalizeScheme($scheme) : null;
         $this->username = $username;
         $this->password = $password;
-        $this->host = $host;
+        $this->host = !is_null($host) ? $this->normalizeHost($host) : null;
         $this->port = $port;
-        $this->path = $path;
-        $this->query = $query;
-        $this->fragment = $fragment;
+        $this->path = !is_null($path) ? $this->encodePath($path) : null;
+        $this->query = !is_null($query) ? $this->encodeQuery($query) : null;
+        $this->fragment = !is_null($fragment) ? $this->encodeFragment($fragment) : null;
     }
 
     /**
@@ -140,36 +142,6 @@ class Uri implements UriInterface
         }
 
         return $uri;
-    }
-
-    /**
-     * @api
-     * @since 0.1.0
-     * @param string $uri
-     * @return \Solid\Http\Uri
-     */
-    public static function fromString(string $uri): Uri
-    {
-        // Set a default protocol so that parse_url behaves correctly.
-        if (strpos($uri, '://') === false) {
-            $uri = 'parse-url://' . $uri;
-        }
-
-        $uriComponents = parse_url($uri);
-
-        $scheme = isset($uriComponents['scheme']) && $uriComponents['scheme'] !== 'parse-url' ?
-            self::normalizeScheme($uriComponents['scheme']) :
-            null;
-
-        $username = $uriComponents['user'] ?? null;
-        $password = $uriComponents['pass'] ?? null;
-        $host = isset($uriComponents['host']) ? self::normalizeHost($uriComponents['host']) : null;
-        $port = $uriComponents['port'] ?? null;
-        $path = isset($uriComponents['path']) ? self::encodePath($uriComponents['path']) : null;
-        $query = isset($uriComponents['query']) ? self::encodeQuery($uriComponents['query']) : null;
-        $fragment = isset($uriComponents['fragment']) ? self::encodeFragment($uriComponents['fragment']) : null;
-
-        return new static($scheme, $username, $password, $host, $port, $path, $query, $fragment);
     }
 
     /**
@@ -407,57 +379,5 @@ class Uri implements UriInterface
             default:
                 return false;
         }
-    }
-
-    /**
-     * @since 0.1.0
-     * @param string $scheme
-     * @return string
-     */
-    protected static function normalizeScheme(string $scheme): string
-    {
-        return strtolower($scheme);
-    }
-
-    /**
-     * @since 0.1.0
-     * @param string $host
-     * @return string
-     */
-    protected static function normalizeHost(string $host): string
-    {
-        return strtolower($host);
-    }
-
-    /**
-     * @since 0.1.0
-     * @param string $path
-     * @return string
-     */
-    protected static function encodePath(string $path): string
-    {
-        return implode('/', array_map('rawurlencode', array_map('rawurldecode', explode('/', (string)$path))));
-    }
-
-    /**
-     * @since 0.1.0
-     * @param string $query
-     * @return string
-     */
-    protected static function encodeQuery(string $query): string
-    {
-        return implode('&', array_map(function ($parameter) {
-            return implode('=', array_map('rawurlencode', array_map('rawurldecode', explode('=', $parameter))));
-        }, explode('&', $query)));
-    }
-
-    /**
-     * @since 0.1.0
-     * @param string $fragment
-     * @return string
-     */
-    protected static function encodeFragment(string $fragment): string
-    {
-        return rawurlencode(rawurldecode((string)$fragment));
     }
 }

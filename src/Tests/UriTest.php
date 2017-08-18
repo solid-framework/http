@@ -35,12 +35,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getScheme
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnScheme(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com');
+        $uri = new Uri('http');
 
         $this->assertSame('http', $uri->getScheme());
     }
@@ -49,12 +48,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getScheme
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function schemeShouldBeLowerCase(): void
     {
-        $uri = Uri::fromString('HTtP://solid-framework.com');
+        $uri = new Uri('HTtP');
 
         $this->assertSame('http', $uri->getScheme());
     }
@@ -63,12 +61,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getScheme
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnEmptyStringIfNoScheme(): void
     {
-        $uri = Uri::fromString('solid-framework.com');
+        $uri = new Uri();
 
         $this->assertSame('', $uri->getScheme());
     }
@@ -77,12 +74,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getHost
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnHost(): void
     {
-        $uri = Uri::fromString('solid-framework.com');
+        $uri = new Uri(null, null, null, 'solid-framework.com');
 
         $this->assertSame('solid-framework.com', $uri->getHost());
     }
@@ -91,12 +87,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getHost
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function hostShouldBeLowerCase(): void
     {
-        $uri = Uri::fromString('solid-framework.com');
+        $uri = new Uri(null, null, null, 'Solid-Framework.com');
 
         $this->assertSame('solid-framework.com', $uri->getHost());
     }
@@ -109,7 +104,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnEmptyStringIfNoHost(): void
     {
-        $uri = Uri::fromString('');
+        $uri = new Uri();
 
         $this->assertSame('', $uri->getHost());
     }
@@ -118,13 +113,12 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPort
-     * @covers ::fromString
      * @covers ::__construct
      * @covers ::isStandardPort
      */
     public function shouldReturnNullIfNoPortIsPresent(): void
     {
-        $uri = Uri::fromString('some-protocol://solid-framework.com');
+        $uri = new Uri('http');
 
         $this->assertNull($uri->getPort());
     }
@@ -133,13 +127,12 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPort
-     * @covers ::fromString
      * @covers ::__construct
      * @covers ::isStandardPort
      */
     public function shouldReturnNullIfNoPortOrSchemeIsPresent(): void
     {
-        $uri = Uri::fromString('solid-framework.com');
+        $uri = new Uri(null, null, null, 'solid-framework.com');
 
         $this->assertNull($uri->getPort());
     }
@@ -148,14 +141,13 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPort
-     * @covers ::fromString
      * @covers ::__construct
      * @covers ::isStandardPort
      */
     public function shouldReturnNullIfStandardPort(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com:80');
-        $sslUri = Uri::fromString('https://solid-framework.com:443');
+        $uri = new Uri('http', null, null, 'solid-framework.com', 80);
+        $sslUri = new Uri('https', null, null, 'solid-framework.com', 443);
 
         $this->assertNull($uri->getPort());
         $this->assertNull($sslUri->getPort());
@@ -165,14 +157,12 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPort
-     * @covers ::fromString
      * @covers ::__construct
      * @covers ::isStandardPort
      */
     public function shouldReturnPortIfNonStandard(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com:8080');
-
+        $uri = new Uri('http', null, null, 'solid-framework.com', 8080);
         $this->assertSame(8080, $uri->getPort());
     }
 
@@ -180,13 +170,12 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPort
-     * @covers ::fromString
      * @covers ::__construct
      * @covers ::isStandardPort
      */
     public function shouldReturnPort(): void
     {
-        $uri = Uri::fromString('some-protocol://solid-framework.com:8080');
+        $uri = new Uri(null, null, null, null, 8080);
 
         $this->assertSame(8080, $uri->getPort());
     }
@@ -195,12 +184,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPath
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnThePath(): void
     {
-        $uri = Uri::fromString('solid-framework.com/some/path?some=parameters');
+        $uri = new Uri(null, null, null, null, null, '/some/path');
 
         $this->assertSame('/some/path', $uri->getPath());
     }
@@ -213,7 +201,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnEmptyStringIfNoPath(): void
     {
-        $uri = Uri::fromString('');
+        $uri = new Uri();
 
         $this->assertSame('', $uri->getPath());
     }
@@ -222,13 +210,12 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPath
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldNotNormalizePath(): void
     {
-        $withSlash = Uri::fromString('solid-framework.com/');
-        $withoutSlash = Uri::fromString('solid-framework.com');
+        $withSlash = new Uri(null, null, null, null, null, '/');
+        $withoutSlash = new Uri();
 
         $this->assertSame('/', $withSlash->getPath());
         $this->assertSame('', $withoutSlash->getPath());
@@ -238,12 +225,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPath
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldPercentEncodePath(): void
     {
-        $uri = Uri::fromString('solid-framework.com/some/path with spaces');
+        $uri = new Uri(null, null, null, null, null, '/some/path with spaces');
 
         $this->assertSame('/some/path%20with%20spaces', $uri->getPath());
     }
@@ -252,12 +238,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getPath
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldNotDoubleEncodePath(): void
     {
-        $uri = Uri::fromString('solid-framework.com/path%2F');
+        $uri = new Uri(null, null, null, null, null, '/path%2F');
 
         $this->assertSame('/path%2F', $uri->getPath());
     }
@@ -266,12 +251,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getQuery
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnTheQuery(): void
     {
-        $uri = Uri::fromString('solid-framework.com?key=value');
+        $uri = new Uri(null, null, null, null, null, null, 'key=value');
 
         $this->assertSame('key=value', $uri->getQuery());
     }
@@ -280,12 +264,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getQuery
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnEmptyStringIfNoQuery(): void
     {
-        $uri = Uri::fromString('solid-framework.com');
+        $uri = new Uri();
 
         $this->assertSame('', $uri->getQuery());
     }
@@ -294,12 +277,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getQuery
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldPercentEncodeQuery(): void
     {
-        $uri = Uri::fromString('solid-framework.com/path?key=value&another-key=value with spaces');
+        $uri = new Uri(null, null, null, null, null, '/path', 'key=value&another-key=value with spaces');
 
         $this->assertSame('key=value&another-key=value%20with%20spaces', $uri->getQuery());
     }
@@ -308,12 +290,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getQuery
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldNotDoubleEncodeQuery(): void
     {
-        $uri = Uri::fromString('solid-framework.com/path?key=value%2F');
+        $uri = new Uri(null, null, null, null, null, '/path', 'key=value%2F');
 
         $this->assertSame('key=value%2F', $uri->getQuery());
     }
@@ -322,12 +303,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getFragment
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnFragment(): void
     {
-        $uri = Uri::fromString('solid-framework.com#fragment');
+        $uri = new Uri(null, null, null, null, null, null, null, 'fragment');
 
         $this->assertSame('fragment', $uri->getFragment());
     }
@@ -336,12 +316,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getFragment
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnEmptyStringIfNoFragment(): void
     {
-        $uri = Uri::fromString('solid-framework.com');
+        $uri = new Uri();
 
         $this->assertSame('', $uri->getFragment());
     }
@@ -350,12 +329,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getFragment
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldPercentEncodeFragment(): void
     {
-        $uri = Uri::fromString('solid-framework.com#fragment with spaces');
+        $uri = new Uri(null, null, null, null, null, null, null, 'fragment with spaces');
 
         $this->assertSame('fragment%20with%20spaces', $uri->getFragment());
     }
@@ -364,12 +342,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getFragment
-     * @covers ::fromString
      * @covers ::__construct
      */
-    public function shouldDoubleEncodeFragment(): void
+    public function shouldNotDoubleEncodeFragment(): void
     {
-        $uri = Uri::fromString('solid-framework.com#fragment%2F');
+        $uri = new Uri(null, null, null, null, null, null, null, 'fragment%2F');
 
         $this->assertSame('fragment%2F', $uri->getFragment());
     }
@@ -378,40 +355,37 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getUserInfo
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnUserInfo(): void
     {
-        $uri = Uri::fromString('user:password@solid-framework.com');
+        $uri = new Uri(null, 'username', 'password');
 
-        $this->assertSame('user:password', $uri->getUserInfo());
+        $this->assertSame('username:password', $uri->getUserInfo());
     }
 
     /**
      * @since 0.1.0
      * @test
      * @covers ::getUserInfo
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnUserInfoUsernameOnlyIfPresent(): void
     {
-        $uri = Uri::fromString('user@solid-framework.com');
+        $uri = new Uri(null, 'username');
 
-        $this->assertSame('user', $uri->getUserInfo());
+        $this->assertSame('username', $uri->getUserInfo());
     }
 
     /**
      * @since 0.1.0
      * @test
      * @covers ::getUserInfo
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnEmptyStringIfNoUserInfo(): void
     {
-        $uri = Uri::fromString('solid-framework.com');
+        $uri = new Uri();
 
         $this->assertSame('', $uri->getUserInfo());
     }
@@ -420,26 +394,24 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getAuthority
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnAuthority(): void
     {
-        $uri = Uri::fromString('user:password@solid-framework.com:8080');
+        $uri = new Uri(null, 'username', 'password', 'solid-framework.com', 8080);
 
-        $this->assertSame('user:password@solid-framework.com:8080', $uri->getAuthority());
+        $this->assertSame('username:password@solid-framework.com:8080', $uri->getAuthority());
     }
 
     /**
      * @since 0.1.0
      * @test
      * @covers ::getAuthority
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldReturnEmptyStringIfNoAuthority(): void
     {
-        $uri = Uri::fromString('');
+        $uri = new Uri();
 
         $this->assertSame('', $uri->getAuthority());
     }
@@ -448,12 +420,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getAuthority
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldOmitOptionalUserInfoIfNotPresent(): void
     {
-        $uri = Uri::fromString('solid-framework.com:8080');
+        $uri = new Uri(null, null, null, 'solid-framework.com', 8080);
 
         $this->assertSame('solid-framework.com:8080', $uri->getAuthority());
     }
@@ -462,12 +433,11 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::getAuthority
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldOmitOptionalPortIfNotPresentOrStandard(): void
     {
-        $uri = Uri::fromString('solid-framework.com');
+        $uri = new Uri(null, null, null, 'solid-framework.com');
 
         $this->assertSame('solid-framework.com', $uri->getAuthority());
     }
@@ -476,18 +446,29 @@ class UriTest extends TestCase
      * @since 0.1.0
      * @test
      * @covers ::__toString
-     * @covers ::fromString
      * @covers ::__construct
      */
     public function shouldRenderCorrectlyAsString(): void
     {
-        $this->assertSame('', (string)Uri::fromString(''));
+        $this->assertSame('', (string)(new Uri()));
         $this->assertSame(
-            'http://user:password@www.solid-framework.com:8080/path?key=value#fragment',
-            (string)Uri::fromString('http://user:password@www.solid-framework.com:8080/path?key=value#fragment')
+            'http://username:password@www.solid-framework.com:8080/path?key=value#fragment',
+            (string)(new Uri(
+                'http',
+                'username',
+                'password',
+                'www.solid-framework.com',
+                8080,
+                '/path',
+                'key=value',
+                'fragment'
+            ))
         );
-        $this->assertSame('//solid-framework.com', (string)Uri::fromString('solid-framework.com'));
-        $this->assertSame('//user@solid-framework.com', (string)Uri::fromString('user@solid-framework.com'));
+        $this->assertSame('//solid-framework.com', (string)(new Uri(null, null, null, 'solid-framework.com')));
+        $this->assertSame(
+            '//username@solid-framework.com',
+            (string)(new Uri(null, 'username', null, 'solid-framework.com'))
+        );
         $this->assertSame(
             'http:path',
             (string)new Uri(
@@ -537,7 +518,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnNewInstanceWithScheme(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com');
+        $uri = new Uri('http', null, null, 'solid-framework.com');
         $uriWithHttps = $uri->withScheme('https');
 
         $this->assertInstanceOf(Uri::class, $uriWithHttps);
@@ -552,7 +533,7 @@ class UriTest extends TestCase
      */
     public function shouldSanitizeSchemeForNewInstance(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com');
+        $uri = new Uri('http', null, null, 'solid-framework.com');
         $uriWithHttps = $uri->withScheme('hTTpS');
 
         $this->assertSame('https', $uriWithHttps->getScheme());
@@ -566,7 +547,7 @@ class UriTest extends TestCase
      */
     public function withSchemeShouldPreserveTheOriginalUri(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com');
+        $uri = new Uri('http', null, null, 'solid-framework.com');
         $uriWithHttps = $uri->withScheme('https');
 
         $this->assertNotSame($uri, $uriWithHttps);
@@ -580,7 +561,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnNewInstanceWithUserInfo(): void
     {
-        $uri = Uri::fromString('user:password@solid-framework.com');
+        $uri = new Uri(null, 'username', 'password', 'solid-framework.com');
         $uriWithUserInfo = $uri->withUserInfo('new-user', 'new-password');
 
         $this->assertInstanceOf(Uri::class, $uriWithUserInfo);
@@ -594,11 +575,11 @@ class UriTest extends TestCase
      */
     public function withUserInfoShouldPreserveTheOriginalUri(): void
     {
-        $uri = Uri::fromString('user:password@solid-framework.com');
+        $uri = new Uri(null, 'username', 'password', 'solid-framework.com');
         $uriWithUserInfo = $uri->withUserInfo('new-user', 'new-password');
 
         $this->assertNotSame($uri, $uriWithUserInfo);
-        $this->assertSame('user:password', $uri->getUserInfo());
+        $this->assertSame('username:password', $uri->getUserInfo());
     }
 
     /**
@@ -609,7 +590,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnNewInstanceWithHost(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com');
+        $uri = new Uri(null, null, null, 'solid-framework.com');
         $uriWithHost = $uri->withHost('another-framework.com');
 
         $this->assertInstanceOf(Uri::class, $uriWithHost);
@@ -624,7 +605,7 @@ class UriTest extends TestCase
      */
     public function shouldSanitizeHostForNewInstance(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com');
+        $uri = new Uri(null, null, null, 'solid-framework.com');
         $uriWithHost = $uri->withHost('Another-Framework.COM');
 
         $this->assertSame('another-framework.com', $uriWithHost->getHost());
@@ -638,7 +619,7 @@ class UriTest extends TestCase
      */
     public function withHostShouldPreserveTheOriginalUri(): void
     {
-        $uri = Uri::fromString('http://solid-framework.com');
+        $uri = new Uri(null, null, null, 'solid-framework.com');
         $uriWithHost = $uri->withHost('another-framework.com');
 
         $this->assertNotSame($uri, $uriWithHost);
@@ -652,7 +633,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnNewInstanceWithPort(): void
     {
-        $uri = Uri::fromString('solid-framework.com:8080');
+        $uri = new Uri(null, null, null, null, 8080);
         $uriWithPort = $uri->withPort(8081);
 
         $this->assertInstanceOf(Uri::class, $uriWithPort);
@@ -666,7 +647,7 @@ class UriTest extends TestCase
      */
     public function withPortShouldPreserveTheOriginalUri(): void
     {
-        $uri = Uri::fromString('solid-framework.com:8080');
+        $uri = new Uri(null, null, null, null, 8080);
         $uriWithPort = $uri->withPort(8081);
 
         $this->assertNotSame($uri, $uriWithPort);
@@ -681,7 +662,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnNewInstanceWithPath(): void
     {
-        $uri = Uri::fromString('solid-framework.com/path');
+        $uri = new Uri(null, null, null, null, null, '/path');
         $uriWithPath = $uri->withPath('/new/path');
 
         $this->assertInstanceOf(Uri::class, $uriWithPath);
@@ -696,7 +677,7 @@ class UriTest extends TestCase
      */
     public function shouldSanitizePathForNewInstance(): void
     {
-        $uri = Uri::fromString('solid-framework.com/path');
+        $uri = new Uri(null, null, null, null, null, '/path');
         $uriWithPath = $uri->withPath('/new path%2F');
 
         $this->assertSame('/new%20path%2F', $uriWithPath->getPath());
@@ -710,7 +691,7 @@ class UriTest extends TestCase
      */
     public function withPathShouldPreserveTheOriginalUri(): void
     {
-        $uri = Uri::fromString('solid-framework.com/path');
+        $uri = new Uri(null, null, null, null, null, '/path');
         $uriWithPath = $uri->withPath('/new/path');
 
         $this->assertNotSame($uri, $uriWithPath);
@@ -725,7 +706,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnNewInstanceWithQuery()
     {
-        $uri = Uri::fromString('solid-framework.com?key=value');
+        $uri = new Uri(null, null, null, null, null, null, 'key=value');
         $uriWithQuery = $uri->withQuery('new-key=new-value');
 
         $this->assertInstanceOf(Uri::class, $uriWithQuery);
@@ -740,7 +721,7 @@ class UriTest extends TestCase
      */
     public function shouldSanitizeQueryForNewInstance()
     {
-        $uri = Uri::fromString('solid-framework.com?key=value');
+        $uri = new Uri(null, null, null, null, null, null, 'key=value');
         $uriWithQuery = $uri->withQuery('new-key%2F=new value');
 
         $this->assertSame('new-key%2F=new%20value', $uriWithQuery->getQuery());
@@ -754,7 +735,7 @@ class UriTest extends TestCase
      */
     public function withQueryShouldPreserveTheOriginalUri(): void
     {
-        $uri = Uri::fromString('solid-framework.com?key=value');
+        $uri = new Uri(null, null, null, null, null, null, 'key=value');
         $uriWithQuery = $uri->withQuery('new-key=new-value');
 
         $this->assertNotSame($uri, $uriWithQuery);
@@ -769,7 +750,7 @@ class UriTest extends TestCase
      */
     public function shouldReturnNewInstanceWithFragment()
     {
-        $uri = Uri::fromString('solid-framework.com#fragment');
+        $uri = new Uri(null, null, null, null, null, null, null, 'fragment');
         $uriWithFragment = $uri->withFragment('new-fragment');
 
         $this->assertInstanceOf(Uri::class, $uriWithFragment);
@@ -784,7 +765,7 @@ class UriTest extends TestCase
      */
     public function shouldSanitizeFragmentForNewInstance()
     {
-        $uri = Uri::fromString('solid-framework.com#fragment');
+        $uri = new Uri(null, null, null, null, null, null, null, 'fragment');
         $uriWithFragment = $uri->withFragment('new fragment%2F');
 
         $this->assertSame('new%20fragment%2F', $uriWithFragment->getFragment());
@@ -798,7 +779,7 @@ class UriTest extends TestCase
      */
     public function withFragmentShouldPreserveTheOriginalUri(): void
     {
-        $uri = Uri::fromString('solid-framework.com#fragment');
+        $uri = new Uri(null, null, null, null, null, null, null, 'fragment');
         $uriWithFragment = $uri->withFragment('new-fragment');
 
         $this->assertNotSame($uri, $uriWithFragment);

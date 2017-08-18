@@ -15,7 +15,7 @@ use Solid\Collection\Enum;
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
  */
-class RequestMethods extends Enum
+class RequestMethod extends Enum
 {
     const GET = 'GET';
     const HEAD = 'HEAD';

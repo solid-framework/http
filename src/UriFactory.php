@@ -12,7 +12,6 @@ namespace Solid\Http;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 
-
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>

@@ -42,7 +42,7 @@
     "require": {
         "php": ">=7.1",
         "psr/http-message": "~1.0.0",
-        "solid-framework/collection": "~0.1.0",
+        "solid-framework/collection": "~0.2.0",
         "http-interop/http-factory": "1.0.x-dev"
     },
     "require-dev": {

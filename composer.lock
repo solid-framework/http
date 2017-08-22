@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "305b9368e466cfe2d71c9f39e7adbdde",
+    "content-hash": "6637a4591c82c63fcd77da45e2fd200f",
     "packages": [
         {
             "name": "http-interop/http-factory",
@@ -110,16 +110,16 @@
         },
         {
             "name": "solid-framework/collection",
-            "version": "0.1.0",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/solid-framework/collection.git",
-                "reference": "e2164b3507fab1859267876389dbeb969c9932f9"
+                "reference": "2d633d5b73f0bcc6e1e4ea195e26b1747260f559"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solid-framework/collection/zipball/e2164b3507fab1859267876389dbeb969c9932f9",
-                "reference": "e2164b3507fab1859267876389dbeb969c9932f9",
+                "url": "https://api.github.com/repos/solid-framework/collection/zipball/2d633d5b73f0bcc6e1e4ea195e26b1747260f559",
+                "reference": "2d633d5b73f0bcc6e1e4ea195e26b1747260f559",
                 "shasum": ""
             },
             "require": {
@@ -157,7 +157,7 @@
                 "php",
                 "solid"
             ],
-            "time": "2017-07-05T11:44:26+00:00"
+            "time": "2017-08-21T07:28:04+00:00"
         },
         {
             "name": "solid-framework/support",
@@ -821,16 +821,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "ecb0b2cdaa0add708fe6f329ef65ae0c5225130b"
+                "reference": "9a02332089ac48e704c70f6cefed30c224e3c0b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/ecb0b2cdaa0add708fe6f329ef65ae0c5225130b",
-                "reference": "ecb0b2cdaa0add708fe6f329ef65ae0c5225130b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/9a02332089ac48e704c70f6cefed30c224e3c0b0",
+                "reference": "9a02332089ac48e704c70f6cefed30c224e3c0b0",
                 "shasum": ""
             },
             "require": {
@@ -866,7 +866,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-08-03T14:17:41+00:00"
+            "time": "2017-08-20T05:47:52+00:00"
         },
         {
             "name": "phpunit/phpunit",

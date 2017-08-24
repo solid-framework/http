@@ -66,6 +66,7 @@ class StringStream implements StreamInterface
     public function close(): void
     {
         $this->content = '';
+        $this->pointer = 0;
         $this->isReadable = false;
         $this->isWritable = false;
         $this->isSeekable = false;
@@ -103,7 +104,7 @@ class StringStream implements StreamInterface
      */
     public function eof(): bool
     {
-        return $this->pointer === $this->getSize();
+        return $this->tell() === $this->getSize();
     }
 
     /**

@@ -414,4 +414,17 @@ class StringStreamTest extends TestCase
 
         $this->assertFalse($stringStream->getMetadata('seekable'));
     }
+
+    /**
+     * @test
+     * @covers ::close
+     */
+    public function shouldSetPointerToZeroWhenClosed(): void
+    {
+        $stringStream = new StringStream('Stream Content');
+        $stringStream->seek(5);
+        $stringStream->close();
+
+        $this->assertSame(0, $stringStream->tell());
+    }
 }

@@ -14,7 +14,6 @@ use Psr\Http\Message\UriInterface;
 /**
  * @package Solid\Http
  * @author Martin Pettersson <martin@solid-framework.com>
- * @todo Throw appropriate exceptions.
  */
 class Uri implements UriInterface
 {

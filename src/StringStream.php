@@ -199,7 +199,7 @@ class StringStream implements StreamInterface
     }
 
     /**
-     * @param string $key
+     * @param string|null $key
      * @return mixed
      */
     public function getMetadata($key = null)
@@ -212,6 +212,8 @@ class StringStream implements StreamInterface
             'stream_type' => 'string',
             'wrapper_type' => 'php://',
             'wrapper_data' => null,
+
+            // The stream is either read/write or detached/closed
             'mode' => $this->isReadable() && $this->isWritable() ? 'r+' : '',
             'seekable' => $this->isSeekable(),
             'uri' => ''

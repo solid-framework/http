@@ -16,7 +16,7 @@ use Psr\Http\Message\MessageInterface;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @coversDefaultClass Solid\Http\Message
+ * @coversDefaultClass \Solid\Http\Message
  */
 class MessageTest extends TestCase
 {

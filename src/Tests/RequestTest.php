@@ -16,7 +16,7 @@ use Psr\Http\Message\RequestInterface;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @coversDefaultClass Solid\Http\Request
+ * @coversDefaultClass \Solid\Http\Request
  */
 class RequestTest extends TestCase
 {

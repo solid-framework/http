@@ -16,7 +16,7 @@ use Psr\Http\Message\StreamInterface;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @coversDefaultClass Solid\Http\StringStream
+ * @coversDefaultClass \Solid\Http\StringStream
  */
 class StringStreamTest extends TestCase
 {

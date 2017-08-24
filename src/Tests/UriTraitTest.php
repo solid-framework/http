@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @coversDefaultClass Solid\Http\UriTrait
+ * @coversDefaultClass \Solid\Http\UriTrait
  */
 class UriTraitTest extends TestCase
 {

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @coversDefaultClass Solid\Http\RequestFactory
+ * @coversDefaultClass \Solid\Http\RequestFactory
  */
 class RequestFactoryTest extends TestCase
 {

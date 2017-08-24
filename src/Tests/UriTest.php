@@ -16,7 +16,7 @@ use Psr\Http\Message\UriInterface;
 /**
  * @package Solid\Http\Tests
  * @author Martin Pettersson <martin@solid-framework.com>
- * @coversDefaultClass Solid\Http\Uri
+ * @coversDefaultClass \Solid\Http\Uri
  */
 class UriTest extends TestCase
 {

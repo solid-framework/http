@@ -9,7 +9,6 @@
 
 namespace Solid\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Solid\Collection\CollectionInterface;

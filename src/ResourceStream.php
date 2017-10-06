@@ -45,33 +45,6 @@ class ResourceStream implements StreamInterface
     protected $isSeekable;
 
     /**
-     * @var array
-     */
-    protected static $readableModes = [
-        'r',
-        'r+',
-        'w+',
-        'a+',
-        'x+',
-        'c+'
-    ];
-
-    /**
-     * @var array
-     */
-    protected static $writableModes = [
-        'r+',
-        'w',
-        'w+',
-        'a',
-        'a+',
-        'x',
-        'x+',
-        'c',
-        'c+'
-    ];
-
-    /**
      * @param resource $resource
      */
     public function __construct($resource)
@@ -83,8 +56,8 @@ class ResourceStream implements StreamInterface
         $metaData = stream_get_meta_data($resource);
 
         $this->resource = $resource;
-        $this->isReadable = in_array($metaData['mode'], self::$readableModes, true);
-        $this->isWritable = in_array($metaData['mode'], self::$writableModes, true);
+        $this->isReadable = in_array($metaData['mode'], StreamMode::readable(), true);
+        $this->isWritable = in_array($metaData['mode'], StreamMode::writable(), true);
         $this->isSeekable = $metaData['seekable'];
     }
 

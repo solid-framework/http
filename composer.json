@@ -35,6 +35,11 @@
             "Solid\\Http\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Solid\\Http\\Tests\\": "tests"
+        }
+    },
     "prefer-stable": true,
     "provide": {
         "psr/http-message-implementation": "~1.0.0"

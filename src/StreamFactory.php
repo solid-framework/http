@@ -34,7 +34,7 @@ class StreamFactory implements StreamFactoryInterface
      * @return \Psr\Http\Message\StreamInterface
      * @throws \InvalidArgumentException
      */
-    public function createStreamFromFile($filename, $mode = 'r'): StreamInterface
+    public function createStreamFromFile($filename, $mode = StreamMode::R): StreamInterface
     {
         if (($resource = @fopen($filename, $mode)) === false) {
             throw new InvalidArgumentException("Could not open: {$filename} using mode: {$mode}");

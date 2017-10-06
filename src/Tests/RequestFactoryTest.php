@@ -12,6 +12,7 @@ namespace Solid\Http\Tests;
 use Interop\Http\Factory\RequestFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Interop\Http\Factory\UriFactoryInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Solid\Http\RequestFactory;
@@ -89,6 +90,7 @@ class RequestFactoryTest extends TestCase
 
         $request = $this->requestFactory->createRequest('GET', $uriMock);
 
+        $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame($uriMock, $request->getUri());
     }
@@ -112,6 +114,7 @@ class RequestFactoryTest extends TestCase
 
         $request = $this->requestFactory->createRequest('GET', 'http://solid-framework.com');
 
+        $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame($uriMock, $request->getUri());
     }

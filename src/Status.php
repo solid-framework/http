@@ -17,11 +17,11 @@ use Solid\Collection\Enum;
  */
 class Status extends Enum
 {
-    // 1xx Informational
+    // 1xx Informational.
     const CONTINUE = 100;
     const SWITCHING_PROTOCOLS = 101;
 
-    // 2xx Success
+    // 2xx Success.
     const OK = 200;
     const CREATED = 201;
     const ACCEPTED = 202;
@@ -30,7 +30,7 @@ class Status extends Enum
     const RESET_CONTENT = 205;
     const PARTIAL_CONTENT = 206;
 
-    // 3xx Redirection
+    // 3xx Redirection.
     const MULTIPLE_CHOICES = 300;
     const MOVED_PERMANENTLY = 301;
     const FOUND = 302;
@@ -39,7 +39,7 @@ class Status extends Enum
     const USE_PROXY = 305;
     const TEMPORARY_REDIRECT = 307;
 
-    // 4xx Client Error
+    // 4xx Client Error.
     const BAD_REQUEST = 400;
     const UNAUTHORIZED = 401;
     const PAYMENT_REQUIRED = 402;
@@ -59,7 +59,7 @@ class Status extends Enum
     const REQUESTED_RANGE_NOT_SATISFIABLE = 416;
     const EXPECTATION_FAILED = 417;
 
-    // 5xx Server Error
+    // 5xx Server Error.
     const INTERNAL_SERVER_ERROR = 500;
     const NOT_IMPLEMENTED = 501;
     const BAD_GATEWAY = 502;
@@ -71,11 +71,11 @@ class Status extends Enum
      * @var array
      */
     protected $strings = [
-        // 1xx Informational
+        // 1xx Informational.
         100 => 'Continue',
         101 => 'Switching Protocols',
 
-        // 2xx Success
+        // 2xx Success.
         200 => 'OK',
         201 => 'Created',
         202 => 'Accepted',
@@ -84,7 +84,7 @@ class Status extends Enum
         205 => 'Reset Content',
         206 => 'Partial Content',
 
-        // 3xx Redirection
+        // 3xx Redirection.
         300 => 'Multiple Choices',
         301 => 'Moved Permanently',
         302 => 'Found',
@@ -93,7 +93,7 @@ class Status extends Enum
         305 => 'Use Proxy',
         307 => 'Temporary Redirect',
 
-        // 4xx Client Error
+        // 4xx Client Error.
         400 => 'Bad Request',
         401 => 'Unauthorized',
         402 => 'Payment Required',
@@ -113,7 +113,7 @@ class Status extends Enum
         416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
 
-        // 5xx Server Error
+        // 5xx Server Error.
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
         502 => 'Bad Gateway',

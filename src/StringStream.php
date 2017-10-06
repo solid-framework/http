@@ -213,7 +213,7 @@ class StringStream implements StreamInterface
             'wrapper_type' => 'php://',
             'wrapper_data' => null,
 
-            // The stream is either read/write or detached/closed
+            // The stream is either read/write or detached/closed.
             'mode' => $this->isReadable() && $this->isWritable() ? 'r+' : '',
             'seekable' => $this->isSeekable(),
             'uri' => ''

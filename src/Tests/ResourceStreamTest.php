@@ -146,10 +146,24 @@ TXT;
     {
         $readableModes = [
             'r',
+	        'rt',
+	        'rb',
+
             'r+',
+	        'r+t',
+	        'r+b',
+
             'w+',
+	        'w+t',
+	        'w+b',
+
             'a+',
-            'c+'
+	        'a+t',
+	        'a+b',
+
+            'c+',
+            'c+t',
+            'c+b'
         ];
 
         foreach ($readableModes as $mode) {
@@ -162,10 +176,21 @@ TXT;
         }
 
         // Test mode that error on existing file.
-        $this->resource = fopen(self::$nonExistingFile, 'x+');
-        $resourceStream = new ResourceStream($this->resource);
+	    $readableModes = [
+	    	'x+',
+		    'x+t',
+		    'x+b'
+	    ];
 
-        $this->assertTrue($resourceStream->isReadable());
+        foreach ($readableModes as $mode) {
+	        $this->resource = fopen(self::$nonExistingFile, $mode);
+	        $resourceStream = new ResourceStream($this->resource);
+
+	        $this->assertTrue($resourceStream->isReadable());
+
+	        fclose($this->resource);
+	        unlink(self::$nonExistingFile);
+        }
     }
 
     /**
@@ -177,12 +202,32 @@ TXT;
     {
         $writableModes = [
             'r+',
+	        'r+t',
+	        'r+b',
+
             'w',
+	        'wt',
+	        'wb',
+
             'w+',
+	        'w+t',
+	        'w+b',
+
             'a',
+	        'at',
+	        'ab',
+
             'a+',
+	        'a+t',
+	        'a+b',
+
             'c',
-            'c+'
+	        'ct',
+	        'cb',
+
+            'c+',
+            'c+t',
+            'c+b'
         ];
 
         foreach ($writableModes as $mode) {
@@ -197,7 +242,12 @@ TXT;
         // Test modes that error on existing file.
         $writableModes = [
             'x',
-            'x+'
+	        'xt',
+	        'xb',
+
+            'x+',
+            'x+t',
+            'x+b'
         ];
 
         foreach ($writableModes as $mode) {
@@ -220,13 +270,36 @@ TXT;
     {
         $seekableModes = [
             'r',
+	        'rt',
+	        'rb',
+
             'r+',
+	        'r+t',
+	        'r+b',
+
             'w',
+	        'wt',
+	        'wb',
+
             'w+',
+	        'w+t',
+	        'w+b',
+
             'a',
+	        'at',
+	        'ab',
+
             'a+',
+	        'a+t',
+	        'a+b',
+
             'c',
-            'c+'
+	        'ct',
+	        'cb',
+
+            'c+',
+            'c+t',
+            'c+b'
         ];
 
         foreach ($seekableModes as $mode) {
@@ -241,7 +314,12 @@ TXT;
         // Test modes that error on existing file.
         $seekableModes = [
             'x',
-            'x+'
+	        'xt',
+	        'xb',
+
+            'x+',
+            'x+t',
+            'x+b'
         ];
 
         foreach ($seekableModes as $mode) {
@@ -264,8 +342,16 @@ TXT;
     {
         $nonReadableModes = [
             'w',
+	        'wt',
+	        'wb',
+
             'a',
+	        'at',
+	        'ab',
+
             'c',
+	        'ct',
+	        'cb'
         ];
 
         foreach ($nonReadableModes as $mode) {

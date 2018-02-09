@@ -17,14 +17,14 @@ use Psr\Http\Message\StreamInterface;
  */
 interface DeserializerInterface
 {
-	/**
-	 * @return array
-	 */
-	public function getContentTypes(): array;
+    /**
+     * @return array
+     */
+    public function getContentTypes(): array;
 
-	/**
-	 * @param \Psr\Http\Message\StreamInterface $body
-	 * @return array|object|null
-	 */
-	public function deserialize(StreamInterface $body);
+    /**
+     * @param \Psr\Http\Message\StreamInterface $body
+     * @return array|object|null
+     */
+    public function deserialize(StreamInterface $body);
 }

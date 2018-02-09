@@ -21,45 +21,45 @@ use Solid\Collection\CollectionInterface;
  */
 class ServerRequest extends Request implements ServerRequestInterface
 {
-	/**
-	 * @var array
-	 */
-	protected $uploadedFiles;
+    /**
+     * @var array
+     */
+    protected $uploadedFiles;
 
-	/**
-	 * @var array
-	 */
-	protected $cookies;
+    /**
+     * @var array
+     */
+    protected $cookies;
 
     /**
      * @var array
      */
     protected $server;
 
-	/**
-	 * @var array|null
-	 */
-	protected $queryParameters;
+    /**
+     * @var array|null
+     */
+    protected $queryParameters;
 
-	/**
-	 * @var array|object|null
-	 */
-	protected $parsedBody;
+    /**
+     * @var array|object|null
+     */
+    protected $parsedBody;
 
-	/**
-	 * @var bool
-	 */
-	protected $hasExplicitParsedBody = false;
+    /**
+     * @var bool
+     */
+    protected $hasExplicitParsedBody = false;
 
-	/**
-	 * @var array
-	 */
-	protected $attributes = [];
+    /**
+     * @var array
+     */
+    protected $attributes = [];
 
-	/**
-	 * @var array
-	 */
-	protected $deserializers = [];
+    /**
+     * @var array
+     */
+    protected $deserializers = [];
 
     /**
      * @param string                                $method
@@ -71,29 +71,29 @@ class ServerRequest extends Request implements ServerRequestInterface
      * @param array                                 $cookies
      * @param array                                 $server
      */
-	public function __construct(
-		string $method,
-		UriInterface $uri,
-		string $protocolVersion,
-		CollectionInterface $headers,
-		StreamInterface $body,
-		array $uploadedFiles = [],
-		array $cookies = [],
+    public function __construct(
+        string $method,
+        UriInterface $uri,
+        string $protocolVersion,
+        CollectionInterface $headers,
+        StreamInterface $body,
+        array $uploadedFiles = [],
+        array $cookies = [],
         array $server = []
-	) {
-		parent::__construct($method, $uri, $protocolVersion, $headers, $body);
+    ) {
+        parent::__construct($method, $uri, $protocolVersion, $headers, $body);
 
-		$this->uploadedFiles = $uploadedFiles;
-		$this->cookies = $cookies;
-		$this->server = $server;
-	}
+        $this->uploadedFiles = $uploadedFiles;
+        $this->cookies = $cookies;
+        $this->server = $server;
+    }
 
     /**
      * @return array
      */
     public function getServerParams(): array
     {
-    	return $this->server;
+        return $this->server;
     }
 
     /**
@@ -101,7 +101,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getCookieParams(): array
     {
-    	return $this->cookies;
+        return $this->cookies;
     }
 
     /**
@@ -110,11 +110,11 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withCookieParams(array $cookies): ServerRequestInterface
     {
-    	$request = clone $this;
+        $request = clone $this;
 
-    	$request->cookies = $cookies;
+        $request->cookies = $cookies;
 
-    	return $request;
+        return $request;
     }
 
     /**
@@ -122,13 +122,13 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getQueryParams(): array
     {
-    	if (!is_null($this->queryParameters)) {
-    		return $this->queryParameters;
-	    }
+        if (!is_null($this->queryParameters)) {
+            return $this->queryParameters;
+        }
 
-    	parse_str($this->uri->getQuery(), $parameters);
+        parse_str($this->uri->getQuery(), $parameters);
 
-    	return $parameters;
+        return $parameters;
     }
 
     /**
@@ -137,11 +137,11 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withQueryParams(array $query): ServerRequestInterface
     {
-    	$request = clone $this;
+        $request = clone $this;
 
-    	$request->queryParameters = $query;
+        $request->queryParameters = $query;
 
-    	return $request;
+        return $request;
     }
 
     /**
@@ -149,7 +149,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getUploadedFiles(): array
     {
-    	return $this->uploadedFiles;
+        return $this->uploadedFiles;
     }
 
     /**
@@ -159,11 +159,11 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface
     {
-    	$request = clone $this;
+        $request = clone $this;
 
-    	$request->uploadedFiles = $uploadedFiles;
+        $request->uploadedFiles = $uploadedFiles;
 
-    	return $request;
+        return $request;
     }
 
     /**
@@ -171,26 +171,26 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getParsedBody()
     {
-    	if ($this->hasExplicitParsedBody) {
-    		return $this->parsedBody;
-	    }
+        if ($this->hasExplicitParsedBody) {
+            return $this->parsedBody;
+        }
 
-    	if ($this->shouldReturnDefaultBody()) {
-    		return $_POST;
-	    }
+        if ($this->shouldReturnDefaultBody()) {
+            return $_POST;
+        }
 
-	    $contentTypes = $this->getHeader('Content-Type');
+        $contentTypes = $this->getHeader('Content-Type');
 
-    	/** @var \Solid\Http\DeserializerInterface $deserializer */
-	    foreach ($this->deserializers as $deserializer) {
-	    	$intersectingContentTypes = array_intersect($contentTypes, $deserializer->getContentTypes());
+        /** @var \Solid\Http\DeserializerInterface $deserializer */
+        foreach ($this->deserializers as $deserializer) {
+            $intersectingContentTypes = array_intersect($contentTypes, $deserializer->getContentTypes());
 
-    		if (count($intersectingContentTypes) > 0) {
-    			return $deserializer->deserialize($this->body);
-		    }
-	    }
+            if (count($intersectingContentTypes) > 0) {
+                return $deserializer->deserialize($this->body);
+            }
+        }
 
-	    return null;
+        return null;
     }
 
     /**
@@ -200,16 +200,16 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withParsedBody($data): ServerRequestInterface
     {
-    	if (!is_array($data) && !is_object($data) && !is_null($data)) {
-    		throw new InvalidArgumentException('Unsupported parsed body type');
-	    }
+        if (!is_array($data) && !is_object($data) && !is_null($data)) {
+            throw new InvalidArgumentException('Unsupported parsed body type');
+        }
 
-	    $request = clone $this;
+        $request = clone $this;
 
-    	$request->parsedBody = $data;
-    	$request->hasExplicitParsedBody = true;
+        $request->parsedBody = $data;
+        $request->hasExplicitParsedBody = true;
 
-    	return $request;
+        return $request;
     }
 
     /**
@@ -217,7 +217,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getAttributes(): array
     {
-    	return $this->attributes;
+        return $this->attributes;
     }
 
     /**
@@ -227,7 +227,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getAttribute($name, $default = null)
     {
-    	return $this->attributes[$name] ?? $default;
+        return $this->attributes[$name] ?? $default;
     }
 
     /**
@@ -237,11 +237,11 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withAttribute($name, $value): ServerRequestInterface
     {
-    	$request = clone $this;
+        $request = clone $this;
 
-    	$request->attributes[$name] = $value;
+        $request->attributes[$name] = $value;
 
-    	return $request;
+        return $request;
     }
 
     /**
@@ -250,35 +250,35 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withoutAttribute($name): ServerRequestInterface
     {
-    	$request = clone $this;
+        $request = clone $this;
 
-    	unset($request->attributes[$name]);
+        unset($request->attributes[$name]);
 
-    	return $request;
+        return $request;
     }
 
-	/**
-	 * @param \Solid\Http\DeserializerInterface $deserializer
-	 * @param bool                              $prepend
-	 */
-	public function addDeserializer(DeserializerInterface $deserializer, bool $prepend = false): void
-	{
-	    call_user_func_array($prepend ? 'array_unshift' : 'array_push', [&$this->deserializers, $deserializer]);
-	}
+    /**
+     * @param \Solid\Http\DeserializerInterface $deserializer
+     * @param bool                              $prepend
+     */
+    public function addDeserializer(DeserializerInterface $deserializer, bool $prepend = false): void
+    {
+        call_user_func_array($prepend ? 'array_unshift' : 'array_push', [&$this->deserializers, $deserializer]);
+    }
 
-	/**
-	 * @return bool
-	 */
-	protected function shouldReturnDefaultBody(): bool
-	{
-		$intersectingContentTypes = array_intersect(
-			$this->getHeader('Content-Type'),
-			[
-				'application/x-www-form-urlencoded',
-				'multipart/form-data'
-			]
-		);
+    /**
+     * @return bool
+     */
+    protected function shouldReturnDefaultBody(): bool
+    {
+        $intersectingContentTypes = array_intersect(
+            $this->getHeader('Content-Type'),
+            [
+                'application/x-www-form-urlencoded',
+                'multipart/form-data'
+            ]
+        );
 
-		return $this->method === 'POST' && count($intersectingContentTypes) > 0;
-	}
+        return $this->method === 'POST' && count($intersectingContentTypes) > 0;
+    }
 }

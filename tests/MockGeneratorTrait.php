@@ -9,6 +9,7 @@
 
 namespace Solid\Http\Tests;
 
+use Psr\Http\Message\UploadedFileInterface;
 use Solid\Collection\CollectionInterface;
 use Iterator;
 use PHPUnit\Framework\TestCase;
@@ -67,4 +68,15 @@ trait MockGeneratorTrait
                     ->setMethods((new ReflectionClass(StreamInterface::class))->getMethods(null))
                     ->getMock();
     }
+
+	/**
+	 * @return \PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected function getUploadedFileMock(): PHPUnit_Framework_MockObject_MockObject
+	{
+		/** @var TestCase $this */
+		return $this->getMockBuilder(UploadedFileInterface::class)
+		            ->setMethods((new ReflectionClass(UploadedFileInterface::class))->getMethods(null))
+		            ->getMock();
+	}
 }

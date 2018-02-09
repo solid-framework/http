@@ -9,9 +9,9 @@
 
 namespace Solid\Http\Tests;
 
-use Solid\Http\Request;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
+use Solid\Http\Request;
 
 /**
  * @package Solid\Http\Tests
